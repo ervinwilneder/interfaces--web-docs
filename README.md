@@ -1,6 +1,6 @@
 # POF
 
-[![CI](https://github.com/nicetry-works/pof/actions/workflows/ci.yml/badge.svg)](https://github.com/nicetry-works/pof/actions/workflows/ci.yml)
+[![CI](https://github.com/ervinwilneder/interfaces--web-docs/actions/workflows/ci.yml/badge.svg)](https://github.com/ervinwilneder/interfaces--web-docs/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 **Portable Organization Format** — a content format for the knowledge and
@@ -65,9 +65,8 @@ npm run lint   # eslint
 ## Deployment
 
 `pof.dev` is deployed manually via the Vercel CLI (`npm run deploy`), not
-on every push to `main` — this repo lives under `nicetry-works`, the
-Vercel project under a personal account, and connecting the two for
-auto-deploy needs a one-time GitHub App authorization outside this repo's
+on every push to `main`: the Vercel project has no Git integration, and
+connecting it for auto-deploy is a one-time step outside this repo's
 control. A push here updates the source of truth; publishing it is a
 separate, deliberate step.
 

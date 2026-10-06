@@ -6,10 +6,10 @@
   "homepage": "https://pof.dev",
   "repository": {
     "type": "git",
-    "url": "https://github.com/nicetry-works/tools--pof.git"
+    "url": "https://github.com/ervinwilneder/interfaces--web-docs.git"
   },
   "bugs": {
-    "url": "https://github.com/nicetry-works/tools--pof/issues"
+    "url": "https://github.com/ervinwilneder/interfaces--web-docs/issues"
   },
   "engines": {
     "node": ">=20"
