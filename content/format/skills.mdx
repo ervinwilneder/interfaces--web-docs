@@ -1,94 +1,66 @@
-import { Callout, FileTree, Tabs } from "nextra/components";
-
 # Skills
 
-A Skill documents one repeatable thing — a technical reference, a
-business concept, or a process — in enough detail that whoever (or
-whatever) reads it can act on it without asking someone first.
+A Skill is one thing the organization knows how to do, written so that
+whoever reads it (a person or an agent) can do it without asking. It has
+the same shape as an [Agent Skill](https://agentskills.io): a folder with
+a `SKILL.md` whose `name` and `description` tell an agent when to load
+the rest.
+
+`skills/<slug>/SKILL.md`, with its files under `files/`.
 
 ## Fields
 
+Besides the [common fields](/format/documents#frontmatter-of-a-piece):
+
 | Field | Required | Notes |
 |---|---|---|
-| `type` | Yes | Always `Skill` — not split into `Handbook`/`Playbook`/`Runbook`, even though `category` distinguishes them. |
-| `title` | Yes | The human-readable name. |
-| `description` | Yes | What this Skill covers and, implicitly, when an agent should reach for it — this is the field an agent reads before deciding to load the rest. |
-| `name` | Yes | Derived from `title`; the slug that names this Skill's export folder. |
-| `category` | Yes | One of `handbook`, `playbook`, or `runbook` — see below. |
-| `domain` | No | A broader area this Skill belongs to, slugified. |
-| `roles` | No | Array of `<team-slug>/<position-slug>` strings — see [Roles](/format/roles#how-other-document-types-reference-a-role). Backed by a real many-to-many relationship, not just free text. |
-| `endorse` | No | A legacy free-text field from an earlier convention (`team/<slug>`). No longer editable in the UI — `roles` replaced it as the actual source of truth for which positions use a Skill — but preserved verbatim on existing documents so nothing is silently dropped on save. |
+| `type` | Yes | `Skill`. No `kind`. |
+| `description` | Yes | When to use it. This is what an agent reads before deciding to load the skill. |
+| `domain` | Yes | The area it belongs to (`administracion`, `compras`). A role's `skill_domains` refer to it. |
+| `category` | No | A free label for grouping skills. |
+| `license` | No | The skill's license, when it comes from elsewhere. |
+| `allowed_tools` | No | The tools the skill asks for, as a list. |
+| `source_repo`, `source_path`, `source_ref`, `source_sha` | No | Where an imported skill came from: the repository, the folder in it, the ref asked for and the commit read. |
+
+Links: `used_by` toward the [roles](/format/roles) that use it.
 
 ## Body
 
-Unlike a [Role](/format/roles), a Skill has **no fixed headings at all** —
-whatever structure the content actually needs, as a sequence of `#`
-headings you add yourself. A short reference might be one heading; a
-detailed runbook might be six.
+The body is the skill's **instructions**, in free Markdown.
 
-## The three categories
+## Example
 
-<Callout type="info">
-  `category` is the one field that changes what kind of thing you're
-  writing, not just how it's labeled.
-</Callout>
-
-<Tabs items={["handbook", "playbook", "runbook"]}>
-  <Tabs.Tab>
-    A **handbook** is a technical reference — something true regardless of
-    who's asking or when. "How our staging deploy pipeline works" is a
-    handbook.
-  </Tabs.Tab>
-  <Tabs.Tab>
-    A **playbook** documents a business concept or entity — something
-    that explains *what a thing is* well enough to reason about it, not a
-    sequence of steps to follow. "What counts as a qualified lead" is a
-    playbook.
-  </Tabs.Tab>
-  <Tabs.Tab>
-    A **runbook** is a process that repeats — an ordered sequence someone
-    (or an agent) follows the same way each time. "Deploying to staging"
-    is a runbook.
-  </Tabs.Tab>
-</Tabs>
-
-## Worked example
-
-<FileTree>
-  <FileTree.Folder name="skills" defaultOpen>
-    <FileTree.Folder name="deploying-to-staging" defaultOpen>
-      <FileTree.File name="SKILL.md" />
-    </FileTree.Folder>
-  </FileTree.Folder>
-</FileTree>
-
-```yaml filename="SKILL.md"
+```yaml filename="skills/criterio-de-rotacion/SKILL.md"
 ---
 type: Skill
-title: Deploying to staging
-description: When rolling out a build to the staging environment
-name: deploying-to-staging
-category: runbook
-domain: platform
-roles:
-  - platform/sre
+title: Criterio de rotación por categoría
+name: criterio-de-rotacion
+description: Cuando hay que proponer movimientos de mercadería entre locales, o de un local al outlet.
+domain: compras
+links:
+  - role: used_by
+    to: roles/compras/producto-y-stock
+    created_at: 2026-10-15T15:47:27.892Z
+created_at: 2026-10-15T15:47:27.892Z
+updated_at: 2026-10-15T16:24:22.464Z
 ---
-
-# Prerequisites
-The build has passed CI and the staging branch is up to date with main.
-
-# Steps
-1. Tag the release candidate.
-2. Run the deploy workflow against the staging target.
-3. Confirm the health check endpoint returns 200.
-
-# Rollback
-If the health check fails, redeploy the previous tag immediately.
+Reglas de Casa Norte para rotar mercadería (las valida Lucía, no se aplican solas):
+- Calzado: se rota por curva de talles.
+- Outlet: va lo que tiene más de 12 semanas de edad y un remanente mayor al 50 %, sin excepción por local.
+- Franquicias: se les propone, no se les impone; la propuesta va por WhatsApp al dueño.
+Salida: una lista de movimientos (de, a, categoría, cantidad, motivo) ordenada por impacto.
 ```
 
-## Attachments
+## Files
 
-A Skill can have files attached alongside `SKILL.md` — a script, a
-template, a reference document. These travel with the Skill through
-[the export bundle](/format/export) at the same relative path they're
-stored at, the same way a Notebook's attachments do.
+A skill can carry files: a script, a template, a reference. Each one is a
+`File` in `files/<nn>-<slug>.md`, with the file's content as the body.
+
+| Field | Required | Notes |
+|---|---|---|
+| `type` | Yes | `File`. |
+| `position` | Yes | Its order inside the skill. |
+| `path` | Yes | Where the file lives inside the skill (`scripts/check.py`). Letters, digits, `.`, `_`, `-` and `/`; never `SKILL.md`. |
+| `content_type` | Yes | Its media type. |
+| `encoding` | Yes | `utf8` for text, `base64` for anything else. |
+| `size_bytes` | No | Its size. |

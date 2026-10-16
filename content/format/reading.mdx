@@ -1,0 +1,49 @@
+# Reading and importing
+
+What a reader checks, and what an importer does, so that a bundle
+written by one system reads the same in another.
+
+## Checks
+
+A reader rejects a bundle, saying which file and why, when:
+
+- `POF.md` is missing, or its `type`, `format` and `revision` are not
+  `Bundle`, `pof` and a revision it reads.
+- A file outside `extensions/` is not part of the
+  [layout](/format#layout).
+- A piece's `type` does not match its folder (`policies/…/POLICY.md`
+  with `type: Role`), or its `name` does not match its folder's slug.
+- A piece has no `title`, or a slug is not valid.
+- A `kind` is not one of its family's.
+- An attribute does not hold against its type: a required one is
+  missing, or a value has the wrong shape.
+- A subentity's `type` does not match its folder, or it sits in a folder
+  its family does not have (`rules/` under an objective).
+- A link's `to` is not a piece of the bundle.
+- A `HISTORY.md` comes without `COMMITS.md`, or names a commit, a
+  subentity or a link that is not there.
+
+An importer checks everything before writing anything: a bundle is
+taken whole or not at all.
+
+## Import
+
+- **Identity by folder.** The importer gives each piece its own ids;
+  what identifies a piece is its folder, and links are resolved from
+  paths.
+- **With history**, it keeps commit ids, dates and actors, so the
+  organization arrives with its past.
+- **Without history**, the bundle is a creation: one commit by whoever
+  imports it, a `create` for every piece, subentity and link.
+- **Extensions** it does not know stay as they are. It does not read
+  them, drop them or rewrite them, binaries included.
+- **Access** is not imported because it is not there: keys, credentials
+  and connections' secrets are set up again by whoever imports.
+
+## Writing
+
+A writer produces the same bundle for the same content: keys in a
+stable order, subentities in their order, the manifest dated by the
+last commit rather than by the moment of export. Two exports of an
+unchanged organization are then byte for byte the same, and a diff
+between two exports shows exactly what changed.

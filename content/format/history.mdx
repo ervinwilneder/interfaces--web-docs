@@ -1,0 +1,80 @@
+import { Callout } from "nextra/components";
+
+# History
+
+A bundle can carry how the organization got here: every commit, and
+every change each commit made. The history is optional. A bundle without
+it is a snapshot, and is complete as one.
+
+## `COMMITS.md`
+
+At the root: every commit, in order.
+
+```yaml filename="COMMITS.md"
+---
+type: Commits
+commits:
+  - id: c1ab1776-2205-4c7b-bfd4-90f3ce49d689
+    at: 2026-10-15T15:29:44.776Z
+    actor: admin:provisioning
+    message: alta de tenant
+    request_id: c56cf099-76bb-4799-88cb-5cbf85c0bf78
+    via: rest
+---
+```
+
+| Field | Required | Notes |
+|---|---|---|
+| `id` | Yes | The commit's id, kept across exports and imports, like a git hash. |
+| `at` | Yes | When it happened. |
+| `actor` | Yes | Who made it, as the writing system names its actors. |
+| `message` | No | Why. |
+| `request_id` | No | The request that produced it. |
+| `via` | No | How it came in: `rest`, `mcp`, `import` or `system`. |
+| `reverts` | No | The id of an earlier commit it undoes. |
+
+## `HISTORY.md`
+
+In each piece's folder: the changes that touched the piece, its
+subentities and its links, in the order they happened.
+
+```yaml filename="policies/aprobacion-de-compras/HISTORY.md"
+---
+type: History
+changes:
+  - at: 2026-10-15T15:47:35.165Z
+    commit: a21fe5a4-da9d-4c0a-bafb-a6aff55a786f
+    action: create
+    entity: subentity
+    target: rules/001-proveedor-nuevo-direccion
+    diff:
+      attributes.title:
+        from: null
+        to: "Proveedor nuevo: dirección"
+---
+```
+
+| Field | Notes |
+|---|---|
+| `at` | When. |
+| `commit` | The id of its commit in `COMMITS.md`. |
+| `action` | What happened: `create`, `update`, `archive`, `restore`, `delete`… |
+| `entity` | What it touched: `record` (the piece itself), `subentity` or `association` (a link). |
+| `target` | For a subentity, its path inside the piece (`rules/001-…`); for a link, its role and the other piece's folder (`used_by roles/mayorista/atencion`). |
+| `diff` | Each field that changed, with its `from` and `to`. Ids of pieces are written as their folders. |
+
+A `HISTORY.md` at the root keeps the changes of what is no longer a
+piece of the bundle, named by the ids the history gave them.
+
+<Callout type="info">
+  The history and the snapshot must agree: replaying every change in
+  order gives the pieces as they are written. A `HISTORY.md` without a
+  `COMMITS.md` is an error, since its changes would name commits that are
+  not there.
+</Callout>
+
+## A bundle without history
+
+An importer takes a bundle without `COMMITS.md` as a creation: one commit
+by whoever imports it, with a `create` for every piece, subentity and
+link. The pieces end up the same; only their past starts at the import.

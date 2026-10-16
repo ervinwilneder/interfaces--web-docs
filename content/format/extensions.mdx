@@ -1,0 +1,92 @@
+import { Callout, FileTree } from "nextra/components";
+
+# Extensions
+
+The core holds what every organization has. Everything else a system
+keeps (a CRM's pipelines and deals, a data platform's notebooks and
+wikis, an ERP's invoices, a BI tool's dashboards) travels as an
+extension: a folder under `extensions/`, named after the system's
+namespace.
+
+<FileTree>
+  <FileTree.File name="POF.md" />
+  <FileTree.Folder name="extensions" defaultOpen>
+    <FileTree.Folder name="hub" defaultOpen>
+      <FileTree.File name="EXTENSION.md" />
+      <FileTree.File name="COMMITS.md" />
+      <FileTree.Folder name="structure" />
+      <FileTree.Folder name="pipelines" />
+      <FileTree.Folder name="records" />
+    </FileTree.Folder>
+    <FileTree.Folder name="data" defaultOpen>
+      <FileTree.File name="EXTENSION.md" />
+      <FileTree.Folder name="notebooks" />
+      <FileTree.Folder name="wikis" />
+      <FileTree.Folder name="artifacts" />
+      <FileTree.Folder name="blobs" />
+    </FileTree.Folder>
+  </FileTree.Folder>
+</FileTree>
+
+Anyone can write an extension, for any system, without asking the spec:
+`extensions/tango/` for an ERP, `extensions/powerbi/` for dashboards.
+
+## `EXTENSION.md`
+
+Every extension starts with its manifest:
+
+```yaml filename="extensions/hub/EXTENSION.md"
+---
+type: Extension
+name: hub
+system: nicetry hub
+format: hub-export/1
+---
+Los datos de hub de Casa Norte, como los exporta el engine.
+```
+
+| Field | Required | Notes |
+|---|---|---|
+| `type` | Yes | Always `Extension`. |
+| `name` | Yes | The namespace, the same as the folder. It is listed in the bundle's [manifest](/format/manifest) under `extensions`. |
+| `system` | Yes | The system that produced it. |
+| `format` | Yes | The format of its contents, as that system names it (`hub-export/1`). |
+| `spec` | No | A link to the documentation of that format. |
+
+## Inside an extension
+
+An extension follows the same rules as the core: Markdown with YAML
+frontmatter, `type` always present, empty fields left out, identity by
+folder, relations as paths, access state left out. Beyond that, its
+layout is its system's.
+
+Its types carry its namespace, so a document says which system it
+belongs to wherever it ends up:
+
+```yaml filename="extensions/data/notebooks/direccion/NOTEBOOK.md"
+---
+type: data.notebook
+title: Dirección
+tags:
+  - direccion
+created_at: 2026-10-15T15:57:21.575Z
+updated_at: 2026-10-15T15:57:21.575Z
+---
+Las notas de la reunión de dirección de los lunes: riesgo, dato y decisión.
+```
+
+A type without a dot is a core type; a type with one (`hub.deal`,
+`data.Artifact`, `loops.Run`) belongs to the extension named before the
+dot. An extension can describe its own types (their fields, what each
+one means) in documents of its own, so that a reader understands them
+without knowing the system. An extension can carry binary files too.
+
+An extension can keep its own history (its `COMMITS.md` and
+`HISTORY.md`), with the same shape as the [core's](/format/history).
+
+<Callout type="info">
+  **Readers keep what they do not know.** A reader that does not know an
+  extension keeps it intact: it neither drops it nor rewrites it. An
+  importer takes the core and the extensions it knows how to read, and
+  leaves the rest as it found it.
+</Callout>

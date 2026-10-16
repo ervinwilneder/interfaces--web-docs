@@ -1,0 +1,94 @@
+# Policies
+
+A Policy decides who handles a case, by walking an ordered ladder of
+rules: the first rule whose condition holds and that produces someone
+wins. Anyone can read it and predict the answer.
+
+`policies/<slug>/POLICY.md`, with its rules under `rules/`.
+
+## Fields
+
+Besides the [common fields](/format/documents#frontmatter-of-a-piece):
+
+| Field | Required | Notes |
+|---|---|---|
+| `type` | Yes | `Policy`. No `kind`. |
+| `require_catch_all` | Yes | `true` if the policy must end in a rule that catches every case. |
+
+The body is the policy's **description**. A policy writes no links.
+
+```yaml filename="policies/aprobacion-de-compras/POLICY.md"
+---
+type: Policy
+title: Aprobación de órdenes de compra
+name: aprobacion-de-compras
+require_catch_all: true
+created_at: 2026-10-15T15:47:35.165Z
+updated_at: 2026-10-16T12:01:34.655Z
+---
+Quién aprueba una orden de compra según su franja de monto (`amount_band`:
+alta ≥ 20.000.000 ARS, media ≥ 5.000.000, baja el resto) y, en proveedores
+nuevos, siempre dirección.
+```
+
+## Rules
+
+Each rule is a `Rule` in `rules/<nn>-<slug>.md`, in the order the ladder
+is walked (`position`, from 0).
+
+| Field | Required | Notes |
+|---|---|---|
+| `type` | Yes | `Rule`. |
+| `position` | Yes | Its step in the ladder. |
+| `title` | Yes | What the rule says, in a line. |
+| `when` | No | The condition. Without it, the rule catches everything that reaches it. |
+| `then` | Yes | Who handles the case. |
+
+```yaml filename="policies/aprobacion-de-compras/rules/001-proveedor-nuevo-direccion.md"
+---
+type: Rule
+position: 0
+then:
+  label: Martín
+  method: fixed
+  target: direccion/socio-comercial
+title: "Proveedor nuevo: dirección"
+when:
+  op: equals
+  path: supplier_new
+  value: true
+created_at: 2026-10-15T15:47:35.165Z
+updated_at: 2026-10-16T12:01:34.655Z
+---
+```
+
+### Conditions
+
+`when` reads the case being evaluated by path (`supplier_new`,
+`amount_band`, `project.team`):
+
+| `op` | Holds when |
+|---|---|
+| `exists` | `path` has a value. |
+| `equals` | `path` equals `value`. |
+| `in` | `path` is one of `values`. |
+| `all` | every one of `conditions` holds. |
+| `any` | at least one of `conditions` holds. |
+| `not` | `condition` does not hold. |
+
+A value can be a literal or `{ from: "a.b.c" }`, read from the case.
+
+### Outcomes
+
+`then.method` says how the target is chosen:
+
+| `method` | Chooses |
+|---|---|
+| `fixed` | `target`, always. `label` is the name to show for it. |
+| `weighted` | one of `candidates`, at random by weight. |
+| `round_robin` | the next of `candidates` in turn, optionally per `partitionBy`. |
+| `weighted_rotation` | the next of `candidates` in a rotation that respects their weights, optionally per `partitionBy`. |
+
+`candidates` is a list of targets, or of `{ target, weight }`; `filter`
+is a condition run on each candidate. A rule whose condition holds but
+whose outcome yields no one does not catch the case: the ladder moves on.

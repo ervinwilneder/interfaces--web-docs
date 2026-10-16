@@ -1,12 +1,12 @@
 name: Content correction
-description: A page claims something about the POF format or a reference implementation that doesn't match reality.
+description: A page claims something about the POF format that doesn't match reality.
 labels: [content]
 body:
   - type: input
     id: page
     attributes:
       label: Page URL
-      placeholder: https://pof.dev/format/wiki
+      placeholder: https://pof.dev/format/roles
     validations:
       required: true
   - type: textarea

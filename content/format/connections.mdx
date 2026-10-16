@@ -1,0 +1,59 @@
+import { Callout } from "nextra/components";
+
+# Connections
+
+A Connection is a system the organization's agents reach: an MCP server
+or an OpenAPI service. It says what to connect to and what is allowed,
+never with which secret.
+
+`connections/<slug>/CONNECTION.md`.
+
+## Fields
+
+Besides the [common fields](/format/documents#frontmatter-of-a-piece):
+
+| Field | Required | Notes |
+|---|---|---|
+| `type` | Yes | `Connection`. |
+| `kind` | Yes | `mcp` (an MCP server) or `openapi` (a service described by OpenAPI). |
+| `url` | No | Where it is. |
+| `engine` | No | The system it reaches, when the writer names systems instead of URLs. |
+| `service` | No | The service it goes through, when access is brokered. |
+| `provider` | No | Who provides it. |
+| `auth_header` | No | The name of the header that carries the credential. The credential itself is never written. |
+| `operations_allow` | No | The operations allowed, as a list. |
+| `pinned_arguments` | No | Arguments fixed for every call, as an object. |
+
+The body is the connection's **description**: what the system is and
+when to use it.
+
+Links: `used_by` toward the [roles](/format/roles) and
+[routines](/format/routines) that use it, and `handbook` toward the
+[skills](/format/skills) that explain it.
+
+```yaml filename="connections/greatmove-whatsapp/CONNECTION.md"
+---
+type: Connection
+kind: mcp
+title: Greatmove WhatsApp
+name: greatmove-whatsapp
+engine: whatsapp
+links:
+  - role: used_by
+    to: roles/mayorista/atencion
+    created_at: 2026-10-15T15:47:38.557Z
+  - role: used_by
+    to: routines/calificar-consulta-mayorista
+    created_at: 2026-10-15T15:47:38.557Z
+created_at: 2026-10-15T15:29:44.831Z
+updated_at: 2026-10-15T16:24:34.027Z
+---
+WhatsApp de Casa Norte: números, contactos, conversaciones, envío de
+mensajes y templates, bandeja pendiente. Usalo para leer o responder
+conversaciones de WhatsApp.
+```
+
+<Callout type="warning">
+  No secrets, ever: no tokens, no keys, no passwords, in any field or in
+  the body. Whoever imports the bundle provides the credentials again.
+</Callout>

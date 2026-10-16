@@ -1,0 +1,77 @@
+# Objectives
+
+An Objective is something the organization commits to achieve, measured
+by its key results.
+
+`objectives/<slug>/OBJECTIVE.md`, with its key results under
+`key-results/`.
+
+## Fields
+
+Besides the [common fields](/format/documents#frontmatter-of-a-piece):
+
+| Field | Required | Notes |
+|---|---|---|
+| `type` | Yes | `Objective`. |
+| `kind` | Yes | The horizon: `strategic` (connects with the vision of the business), `tactical` (short-term deliverables that inform decisions) or `operational` (the day to day). |
+| `goal` | No | The goal the objective belongs to. Objectives with the same `goal` are grouped, the way roles are grouped by team. |
+
+The body is the objective's **description**.
+
+Links: `owned_by` toward the [roles](/format/roles) in charge of it, and
+`impacted_by` toward the [routines](/format/routines) that move it.
+
+```yaml filename="objectives/abrir-tres-franquicias-2027/OBJECTIVE.md"
+---
+type: Objective
+kind: strategic
+title: Abrir tres franquicias nuevas antes del invierno 2027
+name: abrir-tres-franquicias-2027
+goal: Crecer en el interior
+links:
+  - role: impacted_by
+    to: routines/reporte-semanal-de-direccion
+    created_at: 2026-10-16T11:29:58.521Z
+  - role: owned_by
+    to: roles/direccion/socio-comercial
+    created_at: 2026-10-16T10:48:06.315Z
+created_at: 2026-10-15T15:47:36.683Z
+updated_at: 2026-10-16T11:29:58.521Z
+---
+La expansión de Casa Norte va por franquicias en ciudades intermedias. Que
+las consultas de interesados entren al tablero y se conviertan en
+aperturas.
+```
+
+## Key results
+
+Each key result is a `KeyResult` in `key-results/<nn>-<slug>.md`.
+
+| Field | Required | Notes |
+|---|---|---|
+| `type` | Yes | `KeyResult`. |
+| `position` | Yes | Its order inside the objective. |
+| `title` | Yes | What it measures, in words. |
+| `measure` | Yes | What it measures, from the writer's catalog of measures (`facturacion`, `tiempo_respuesta`…). |
+| `start_value` | Yes | Where it starts. |
+| `target` | Yes | Where it has to get. |
+| `start_date`, `due_date` | Yes | The window, as dates. |
+| `current_value` | No | The last value measured. |
+| `measured_at` | No | When it was measured. |
+
+```yaml filename="objectives/crecer-canal-mayorista-q4/key-results/003-facturacion-mayorista-del-trimestre-ars.md"
+---
+type: KeyResult
+position: 2
+current_value: 19400000
+due_date: 2026-12-31
+measure: facturacion
+measured_at: 2026-10-14T12:00:00.000Z
+start_date: 2026-10-01
+start_value: 0
+target: 48000000
+title: Facturación mayorista del trimestre (ARS)
+created_at: 2026-10-15T15:47:35.931Z
+updated_at: 2026-10-15T16:24:30.882Z
+---
+```

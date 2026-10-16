@@ -2,7 +2,7 @@
 
 ## Why
 
-If this corrects a factual claim about the format or an access surface,
+If this corrects a factual claim about the format,
 what did you check it against?
 
 ## Checklist

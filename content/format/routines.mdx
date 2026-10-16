@@ -1,0 +1,48 @@
+# Routines
+
+A Routine is something an agent or a person does again and again, step
+by step: its goal, its procedure and when it is done.
+
+`routines/<slug>/ROUTINE.md`.
+
+## Fields
+
+Besides the [common fields](/format/documents#frontmatter-of-a-piece):
+
+| Field | Required | Notes |
+|---|---|---|
+| `type` | Yes | `Routine`. No `kind`. |
+| `steps` | No | The procedure, as Markdown. |
+| `definition_of_done` | No | How to tell it is done. |
+
+The body is the routine's **goal**.
+
+Links: `used_by` toward the [roles](/format/roles) that run it, and
+`uses` toward the [channels](/format/channels) it works through. The
+[objectives](/format/objectives) it moves and the
+[connections](/format/connections) it needs point at it from their side.
+
+```yaml filename="routines/calificar-consulta-mayorista/ROUTINE.md"
+---
+type: Routine
+title: Calificar consulta mayorista
+name: calificar-consulta-mayorista
+definition_of_done: La conversación tiene respuesta, etiqueta de tipo y, si es pedido, su deal en Actividades asociado al contacto.
+steps: |-
+  1. Al despertar por un mensaje entrante, leé la conversación completa en WhatsApp.
+  2. Aplicá la skill `calificar-consulta-mayorista`.
+  3. Respondé por WhatsApp con la conexión del canal; registrá el deal en el tablero Mayorista si hay intención de compra.
+  4. Dejá en la conversación la nota con lo hecho.
+links:
+  - role: used_by
+    to: roles/mayorista/atencion
+    created_at: 2026-10-15T15:47:33.367Z
+  - role: uses
+    to: channels/whatsapp-mayorista
+    created_at: 2026-10-15T15:47:33.367Z
+created_at: 2026-10-15T15:47:33.367Z
+updated_at: 2026-10-16T11:26:47.927Z
+---
+Responder y calificar cada consulta mayorista que entra por WhatsApp en
+menos de 30 minutos, dejando el deal registrado cuando corresponde.
+```

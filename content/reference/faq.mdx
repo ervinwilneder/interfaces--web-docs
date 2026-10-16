@@ -1,69 +1,49 @@
-import { Callout } from "nextra/components";
-
 # FAQ
 
-### Why not just use Agent Skills for all of this?
+### Where do notebooks, wikis, deals or invoices go?
 
-Agent Skills is built specifically for one thing: packaging a capability
-an agent loads on demand. POF covers that case (a Skill document is
-compatible with that same shape) but also covers three document types
-that were never about capability-loading — a Role, a Notebook, and a Wiki
-object describe what an organization *is*, not something an agent
-activates. See [POF vs. MCP vs. Agent Skills](/concepts/pof-vs-mcp-vs-skills)
-for the full comparison.
+In an [extension](/format/extensions). The core holds only what every
+organization has. A data platform writes its notebooks and wikis under
+`extensions/data/`, a CRM its deals under `extensions/hub/`, an ERP its
+invoices under its own folder, each with namespaced types.
 
-### Why not just use MCP resources for everything, and skip the format question entirely?
+### Can I write an extension for my own system?
 
-MCP (and WebMCP) answer "how does an agent connect," not "what shape is
-the content once it's connected." Without a format like POF underneath,
-every implementation would invent its own frontmatter fields for a Role
-or a Notebook, and nothing written against one would be portable to
-another. POF is the answer to the second question; MCP is the reference
-implementation's answer to the first (one of three, alongside WebMCP and
-delegated access).
+Yes, without asking anyone. Pick a namespace, write an `EXTENSION.md`,
+follow the same rules as the core (type always present, empty fields left
+out, relations as paths, no secrets) and list it in the manifest.
 
-### Can I self-host the reference implementation?
+### What happens to an extension my importer does not know?
 
-The README documents Docker-based self-hosting — the container runs the
-database migrations before starting the server, same mechanism the
-hosted version uses.
+It stays as it is. A reader that does not know an extension neither drops
+it nor rewrites it, so a bundle that passes through several systems keeps
+everything it came with.
 
-### Is Wiki ever writable by an agent, on any surface?
+### Do I have to include the history?
 
-No, by design — see
-[Wiki objects](/format/wiki#read-only-on-every-agent-surface). New Wiki
-objects come from the workspace's own inbox flow, which is meant for
-messier inputs (a forwarded email, a pasted note) than a clean tool call
-handles well.
+No. `COMMITS.md` and `HISTORY.md` are optional. Without them a bundle is
+a snapshot, and an importer takes it as a creation by whoever imports it.
+See [History](/format/history).
 
-### What happens if I never sign up?
+### Why paths and not ids?
 
-Nothing is lost, and nothing stops working. An anonymous session behaves
-identically to a claimed one across all four document types and all
-three access surfaces — see
-[Why POF](/concepts/why-pof#zero-friction-by-default). The only thing
-signing up changes is that your data survives losing that specific
-browser session (a new device, a cleared cookie jar).
+Ids belong to the system that issued them; they mean nothing in the next
+one. A folder means the same thing in every system, and a person can
+follow it.
 
-<Callout type="info">
-  If you do sign up later, from an existing anonymous session, everything
-  you already built moves with you — including any delegated-access
-  grants you'd already approved. Nothing is thrown away by claiming an
-  account after the fact.
-</Callout>
+### Are secrets ever in a bundle?
 
-### Does deleting something ever happen without confirmation?
+Never. Keys, tokens, passwords and sessions stay out, in the core and in
+every extension. A [Connection](/format/connections) can say which header
+carries a credential, never the credential.
 
-No. Every delete-capable action, on every surface that has one, is a
-distinct, explicitly named capability or tool — never a side effect of
-some other action, and never available without a human either driving it
-directly (WebMCP) or having approved that exact capability by name in
-advance (delegated access). The [remote MCP server](/surfaces/remote-mcp)
-doesn't expose delete tools at all, for the same reason.
+### Is a POF Skill an Agent Skill?
+
+It has the same shape: a folder with a `SKILL.md` whose `name` and
+`description` tell an agent when to use it. See
+[POF vs. MCP vs. Agent Skills](/concepts/pof-vs-mcp-vs-skills).
 
 ### Is this an official standard?
 
-No — POF is a content format illustrated by one real reference
-implementation, built for the OpenAI WebMCP Challenge. It's offered in
-the spirit Agent Skills was: naming a shape so it can be reused, not
-declaring a standard on anyone's behalf.
+No. POF is a format with a working implementation behind it, offered so
+that more than one system can use the same shape.

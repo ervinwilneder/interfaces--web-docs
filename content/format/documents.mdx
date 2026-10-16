@@ -1,0 +1,118 @@
+import { Callout } from "nextra/components";
+
+# Documents and links
+
+Every document of the core is a Markdown file with a YAML frontmatter
+block. The frontmatter holds the structured fields; the body holds the
+piece's main text. These conventions apply to all seven core types.
+
+## Frontmatter of a piece
+
+Fields are written in this order:
+
+| Field | Required | Notes |
+|---|---|---|
+| `type` | Yes | The POF type, capitalized: `Role`, `Skill`, `Policy`, `Objective`, `Routine`, `Channel`, `Connection`. It must match the folder. |
+| `kind` | In some families | The piece's type within its family's catalog, written only where the family has more than one: `Objective` (`strategic`, `tactical`, `operational`), `Channel` (the platform) and `Connection` (`mcp`, `openapi`). |
+| `title` | Yes | The human name. |
+| `name` | Yes | The slug, the same as the piece's folder. |
+| *attributes* | Depends on the type | The piece's attributes, each as a field of its own (`team`, `goal`, `require_catch_all`…). Each type's page lists them. |
+| `tags` | No | A list of labels. |
+| `links` | No | The piece's relations to other pieces. See [Links](#links). |
+| `archived_at` | No | When the piece was archived. An archived piece still travels in the bundle. |
+| `created_at`, `updated_at` | No | ISO 8601 timestamps. |
+| `created_by`, `updated_by` | No | Who created and last changed it, as the writing system names its actors. |
+
+```yaml filename="skills/conciliar-cheques/SKILL.md"
+---
+type: Skill
+title: Conciliar cheques con proveedores
+name: conciliar-cheques
+description: Cuando hay que cruzar los cheques diferidos emitidos contra las facturas y órdenes de compra de un proveedor.
+domain: administracion
+links:
+  - role: used_by
+    to: roles/administracion/gerenta
+    created_at: 2026-10-15T15:47:26.894Z
+created_at: 2026-10-15T15:47:26.894Z
+updated_at: 2026-10-15T16:24:21.758Z
+---
+1. Tomá las órdenes de compra del proveedor en estado Ordenado o Recibido.
+2. Para cada una, verificá en el checklist si la factura está recibida y el cheque emitido.
+3. Una OC recibida sin factura es un reclamo al proveedor.
+```
+
+An attribute can never be named like one of the fields above: a writer
+that has one would lose it.
+
+## Body
+
+The body is the piece's main long text, which depends on the family: the
+**instructions** of a Role or a Skill, the **description** of a Policy,
+Objective, Channel or Connection, and the **goal** of a Routine. Any
+other long text (a routine's `steps`, for example) is an attribute in the
+frontmatter.
+
+## Empty fields are left out
+
+A field with no value is not written: no `tags: []`, no `description: ""`,
+no `archived_at: null`. A reader treats a missing field as empty.
+
+## Links
+
+A link is a relation from the piece that writes it to another piece of
+the bundle. It is written as a path, never an id:
+
+```yaml
+links:
+  - role: owned_by
+    to: roles/direccion/socio-comercial
+    created_at: 2026-10-16T10:48:05.651Z
+```
+
+| Field | Notes |
+|---|---|
+| `role` | What the relation means, read from the piece that writes it. |
+| `to` | The folder of the other piece, from the root of the bundle. |
+| `archived_at` | When the link was archived, if it was. |
+| `created_at` | When the link was made. |
+
+The five roles:
+
+| `role` | Reads as | Written by |
+|---|---|---|
+| `used_by` | this piece is used by `to` | a Skill, Channel or Routine toward the roles that use it; a Connection toward the roles and routines that use it |
+| `uses` | this piece uses `to` | a Routine toward the channels it works through |
+| `handbook` | this piece is explained in `to` | a Connection toward the skills that explain it |
+| `owned_by` | this piece is in the charge of `to` | an Objective toward the roles that own it |
+| `impacted_by` | this piece is moved by `to` | an Objective toward the routines that move it |
+
+Each link is written once, on one side. A reader that wants the other
+direction (the skills a role uses, the objectives a routine moves) looks
+for links whose `to` is the piece.
+
+## Subentities
+
+Some pieces carry items of their own: a policy's rules, an objective's
+key results, a skill's files. Each item is a file in a folder of the
+piece, named by a zero-padded position and a slug of its title
+(`rules/001-proveedor-nuevo-direccion.md`). Its frontmatter has:
+
+| Field | Notes |
+|---|---|
+| `type` | `Rule`, `KeyResult` or `File`, matching the folder. |
+| `position` | Its order inside the piece, from 0. |
+| *attributes* | The item's own fields. |
+| `archived_at`, `created_at`, `updated_at` | As on a piece. |
+
+## Annotations
+
+An annotation is a note left on a piece: `annotations/1.md`,
+`annotations/2.md`… in order. Its frontmatter is `type: Annotation` and
+an `id` that a writer keeps across exports; its body is the note.
+
+<Callout type="info">
+  The folder is the identity. Two bundles that hold
+  `policies/aprobacion-de-compras` are talking about the same policy,
+  whatever ids each system gives it inside.
+</Callout>

@@ -2,77 +2,112 @@ import { Callout, Steps } from "nextra/components";
 
 # Quickstart
 
-This walks through POF hands-on, against the reference implementation
-built for the OpenAI WebMCP Challenge. Nothing here needs an account,
-an API key, or any setup beyond a Chromium-based browser.
-
-## Prerequisites
-
-- A Chromium-based browser (Chrome, Edge) with the WebMCP testing surface
-  enabled: visit `chrome://flags/#enable-webmcp-testing` and turn it on.
-  This exposes `navigator.modelContextTesting`, which lets you call an
-  in-page agent tool directly from DevTools — no real agent required to
-  try this.
-- The reference app running (locally, or wherever it's deployed) — it
-  needs nothing from you to start using it.
+A POF bundle is a zip of Markdown files, so nothing here needs more than
+a shell. The examples come from `casa-norte.pof.zip`, the bundle of a
+demo retailer with the core and six extensions.
 
 <Steps>
 
-### Land on the app
+### Open it
 
-Open the app's `/roles` page. There's no sign-up wall: a real,
-credential-less session is created for you the instant you arrive. Roles,
-Skills, Notebooks, and Wiki are all already usable.
-
-### Create a Role
-
-Use the "New role" action in the UI — give it a team and a position (for
-example, team `commercial`, position `revops-pipeline-and-forecasting`).
-This writes a real [`ROLE.md`](/format/roles) behind the scenes, exactly
-the shape described in [The format](/format).
-
-### Call the WebMCP tool yourself
-
-Open DevTools on that same tab and run:
-
-```js
-await navigator.modelContextTesting.getTools()
+```bash
+unzip casa-norte.pof.zip -d casa-norte
+cd casa-norte
+ls
+# COMMITS.md  POF.md  channels  connections  extensions  objectives
+# policies  roles  routines  skills
 ```
 
-You should see `list_roles`, `get_role`, `create_role`, `update_role`, and
-`delete_role` in the list — the same tools described in
-[WebMCP, in-page](/surfaces/webmcp). Now call one:
+### Read the manifest
 
-```js
-await navigator.modelContextTesting.executeTool("list_roles", {})
+`POF.md` says what the bundle is: the format, the revision of the spec it
+follows, the moment it describes, how much it holds and which extensions
+it carries.
+
+```yaml filename="POF.md"
+---
+type: Bundle
+format: pof
+revision: 2026-10-16
+as_of: 2026-10-16T12:43:25.205Z
+counts:
+  pieces: 21
+  subentities: 10
+  links: 37
+  commits: 49
+  changes: 92
+extensions:
+  - hub
+  - data
+  - growth
+  - loops
+  - whatsapp
+  - agents
+---
 ```
 
-That's the entire integration surface for an in-page agent: no API key,
-no separate auth step — it's reading through the same session your
-browser tab already has open.
+A reader checks `type`, `format` and `revision` before anything else.
+See [The manifest](/format/manifest).
 
-### Export it as plain files
+### List the pieces
 
-Back in the UI, use the workspace-wide **Export** action in the header.
-You'll get a `.zip` — open it, and you'll find your new Role at
-`roles/commercial/revops-pipeline-and-forecasting/ROLE.md`, readable in
-any text editor, with nothing app-specific about it. See
-[The export bundle](/format/export) for the full layout.
+Every core piece is one file named after its type, in its own folder:
+
+```bash
+find . -path ./extensions -prune -o -name '[A-Z]*.md' -print \
+  | grep -v -e HISTORY -e COMMITS -e POF.md | sort
+# ./channels/whatsapp-mayorista/CHANNEL.md
+# ./connections/greatmove-actividades/CONNECTION.md
+# ./objectives/crecer-canal-mayorista-q4/OBJECTIVE.md
+# ./policies/aprobacion-de-compras/POLICY.md
+# ./roles/administracion/gerenta/ROLE.md
+# ./routines/calificar-consulta-mayorista/ROUTINE.md
+# ./skills/calificar-consulta-mayorista/SKILL.md
+# ...
+```
+
+### Follow a link
+
+Links are paths. The objective says who owns it and which routines move
+it:
+
+```yaml filename="objectives/crecer-canal-mayorista-q4/OBJECTIVE.md"
+---
+type: Objective
+kind: tactical
+title: Crecer el canal mayorista en el último trimestre
+name: crecer-canal-mayorista-q4
+goal: Crecer en el interior
+links:
+  - role: impacted_by
+    to: routines/calificar-consulta-mayorista
+  - role: owned_by
+    to: roles/mayorista/atencion
+---
+```
+
+`routines/calificar-consulta-mayorista` is a folder in the same bundle;
+open its `ROUTINE.md` and you are there. See
+[Documents and links](/format/documents#links).
+
+### Read the history, if it is there
+
+`COMMITS.md` lists every commit; each piece's `HISTORY.md` lists the
+changes that touched it, field by field. Both are optional: a bundle
+without them is a snapshot. See [History](/format/history).
+
+### Leave the extensions alone
+
+`extensions/` holds what other systems exported: a CRM's pipelines, a
+data platform's notebooks, a WhatsApp inbox. Each has an `EXTENSION.md`
+that says which system wrote it and in what format. A reader that does
+not know one keeps it as it is. See [Extensions](/format/extensions).
 
 </Steps>
 
 <Callout type="info">
-  Everything above works identically for Skills, Notebooks, and Wiki — a
-  Role was just the shortest path to something visible. The tool names
-  differ (`create_skill`, `add_notebook_note`, `get_wiki_object`, ...) but
-  the shape doesn't.
+  Writing a bundle is the same walk in reverse: one folder per piece, its
+  attributes as frontmatter fields, its relations as paths, and the
+  manifest at the root. [Reading and importing](/format/reading) lists
+  what a reader must check.
 </Callout>
-
-## Next steps
-
-- Read [Why POF](/concepts/why-pof) for the thinking behind the zero-friction,
-  one-source-of-truth design.
-- Read [Access surfaces](/surfaces) for the other two ways an agent can
-  reach the same data without sharing your browser tab.
-- Read [The format](/format) for the full frontmatter spec of all four
-  document types.

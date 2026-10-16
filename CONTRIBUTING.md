@@ -15,7 +15,7 @@ The site runs at `http://localhost:3003`.
 ## How content is organized
 
 - `content/*.mdx` — one file per page. Nested folders (`content/format/`,
-  `content/surfaces/`, ...) become collapsible sidebar groups.
+  `content/concepts/`, ...) become collapsible sidebar groups.
 - `content/**/_meta.js` — controls the title and order of pages within a
   folder (and of the folders themselves, at the root).
 - `app/` — the Next.js/Nextra shell (layout, favicon, the one MDX

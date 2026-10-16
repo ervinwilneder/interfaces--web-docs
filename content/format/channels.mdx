@@ -1,0 +1,39 @@
+# Channels
+
+A Channel is a place where the organization talks to someone: a WhatsApp
+line, a Slack workspace, a Telegram bot, an inbox.
+
+`channels/<slug>/CHANNEL.md`.
+
+## Fields
+
+Besides the [common fields](/format/documents#frontmatter-of-a-piece):
+
+| Field | Required | Notes |
+|---|---|---|
+| `type` | Yes | `Channel`. |
+| `kind` | Yes | The platform: `slack`, `discord`, `teams`, `telegram`, `twilio`, `github`, `linear`, `chat_sdk`, `mcp`, `linq`, `photon`, `http`, `custom` or `other`. |
+| `identifier` | No | How the channel is addressed on its platform: a number, a handle, a workspace. |
+| `platform_name` | No | The platform's name, for `custom` and `other`. |
+
+The body is the channel's **description**.
+
+Links: `used_by` toward the [roles](/format/roles) that work through it.
+
+```yaml filename="channels/whatsapp-mayorista/CHANNEL.md"
+---
+type: Channel
+kind: other
+title: WhatsApp mayorista
+name: whatsapp-mayorista
+platform_name: WhatsApp Business
+links:
+  - role: used_by
+    to: roles/mayorista/atencion
+    created_at: 2026-10-15T15:47:30.449Z
+created_at: 2026-10-15T15:47:30.449Z
+updated_at: 2026-10-15T16:24:24.567Z
+---
+La línea mayorista de Casa Norte: por acá escriben los dueños de
+franquicias y los clientes mayoristas del interior.
+```

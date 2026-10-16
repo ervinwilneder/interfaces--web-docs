@@ -1,47 +1,62 @@
 # Glossary
 
+**Annotation**
+A note left on a piece, in its `annotations/` folder. See
+[Documents and links](/format/documents#annotations).
+
 **Bundle**
-A folder of one or more OKF-conformant Markdown files representing a
-document and anything attached to it. In POF, a Skill's folder (with its
-`SKILL.md` and any attached files) is a bundle; so is the whole workspace
-[export](/format/export) taken as one unit.
+A whole organization as one zip or folder of Markdown files, with a
+`POF.md` manifest at its root. See [The bundle](/format).
 
-**Capability**
-The unit of permission in [delegated access](/surfaces/delegated-access) —
-one named action (`create_role`, `add_notebook_note`, ...) a human
-approves for one agent to perform, on their behalf, going forward.
+**Commit**
+One change to the organization, made by one actor at one moment, listed
+in `COMMITS.md`. See [History](/format/history).
 
-**Delegated access**
-The access surface for an agent without a shared browser tab: a
-device-authorization flow that ends in the agent holding its own scoped
-credential. See [Delegated access](/surfaces/delegated-access).
+**Core**
+The seven types every organization has: Role, Skill, Policy, Objective,
+Routine, Channel and Connection. See [The bundle](/format#the-core).
+
+**Extension**
+Another system's data inside a bundle, in `extensions/<namespace>/`,
+with its own `EXTENSION.md` and namespaced types (`hub.deal`). See
+[Extensions](/format/extensions).
 
 **Frontmatter**
-The YAML block at the top of every POF document, delimited by `---`
-lines, carrying its structured fields (`type`, `title`, `name`, ...)
-separately from its free-form Markdown body.
+The YAML block at the top of every document, between `---` lines, with
+its structured fields, apart from its Markdown body.
+
+**Kind**
+A piece's type within its family's catalog, written only in families
+with more than one: Objective, Channel and Connection.
+
+**Link**
+A relation from one piece to another, written as a `role` and a path
+(`to`). See [Documents and links](/format/documents#links).
+
+**Manifest**
+`POF.md`: what the bundle is, which revision of the spec it follows and
+which extensions it carries. See [The manifest](/format/manifest).
 
 **MCP (Model Context Protocol)**
-An open protocol for how an agent connects to tools and resources,
-independent of what those tools or resources hold. See
+An open protocol for how an agent connects to tools and resources. See
 [POF vs. MCP vs. Agent Skills](/concepts/pof-vs-mcp-vs-skills).
 
 **OKF (Open Knowledge Format)**
-The underlying frontmatter convention POF's documents conform to: `type`
-required, `title`/`description`/`tags` as the recommended field family.
-See [The format](/format).
+The frontmatter convention POF documents conform to: `type` required,
+`title`, `description` and `tags` as its recommended fields.
 
-**Resource**
-In MCP terms, a piece of content an agent reads by URI rather than by
-calling a tool. The [remote MCP server](/surfaces/remote-mcp) exposes
-every POF document this way.
+**Piece**
+One document of the core, in its own folder: a role, a skill, a policy,
+an objective, a routine, a channel or a connection.
+
+**Revision**
+The version of this spec a bundle follows, named by its date. The
+current one is `2026-10-16`.
 
 **Slug**
-The lowercase, hyphenated, accent-stripped form of a title, used
-anywhere a document needs a stable, addressable name — a folder name, a
-URI segment. See [Documents and slugs](/concepts/documents-and-slugs).
+The lowercase, hyphenated name of a folder (`aprobacion-de-compras`).
+It is a piece's `name` and its identity in the bundle.
 
-**WebMCP**
-The browser API (`document.modelContext`) that lets a web page register
-tools an in-page agent can call directly, inheriting whatever session
-that page already has. See [WebMCP, in-page](/surfaces/webmcp).
+**Subentity**
+An item that belongs to a piece, in a folder of it: a policy's rules, an
+objective's key results, a skill's files.

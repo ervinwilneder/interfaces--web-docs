@@ -3,52 +3,34 @@
 [![CI](https://github.com/ervinwilneder/interfaces--web-docs/actions/workflows/ci.yml/badge.svg)](https://github.com/ervinwilneder/interfaces--web-docs/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-**Portable Organization Format** — a content format for the knowledge and
-execution layers of any organization: plain Markdown files with a YAML
-frontmatter block, conformant to [OKF](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md)
-(Open Knowledge Format) v0.2, meant to be read equally well by a person, a
-script, or an agent.
+**Portable Organization Format**: a whole organization as one bundle of
+Markdown files with YAML frontmatter (its roles, skills, policies,
+objectives, routines, channels and connections, with the links between
+them and, optionally, their history), readable by a person, an agent or
+another system that imports it.
 
 **📖 Full documentation: [pof.dev](https://pof.dev)**
 
 ## What this repo is
 
-This repo is the documentation site for POF — the format's spec, the
-thinking behind it, and how a reference implementation exposes it to
-agents over [WebMCP](https://webmachinelearning.github.io/webmcp/),
-delegated access, and a remote [MCP](https://modelcontextprotocol.io)
-server. It's a static [Nextra](https://nextra.site) site with no backend
-of its own; every claim it makes about the format is checked against a
-real, working implementation, not invented for illustration.
+The documentation site for POF: the spec (revision 2026-10-16) and the
+thinking behind it. A static [Nextra](https://nextra.site) site with no
+backend of its own; its examples come from a real exported bundle.
 
-Here's the shape of one POF document — a Role:
+The shape of a bundle:
 
-```yaml
----
-type: Role
-title: Customer Support Lead
-name: customer-support-lead
-team: support
----
-
-# Identity
-The first point of contact for anything a customer brings up...
-
-# Operating frame
-Works out of the shared support inbox and the team's running Notebook...
-
-# Purpose
-Keep the gap between "a customer said something" and "someone
-acknowledged it" as short as it can reasonably be...
-
-# Rules
-Never close a ticket without a reply the customer can actually read
-as an answer...
 ```
-
-Start with [pof.dev](https://pof.dev) for the overview, the full format
-spec (Roles, Skills, Notebooks, Wiki objects), and how the three access
-surfaces (WebMCP, delegated access, remote MCP) each work.
+POF.md                      manifest: type Bundle, format pof, revision
+COMMITS.md                  the commits (optional)
+roles/<team>/<slug>/ROLE.md
+skills/<slug>/SKILL.md
+policies/<slug>/POLICY.md
+objectives/<slug>/OBJECTIVE.md
+routines/<slug>/ROUTINE.md
+channels/<slug>/CHANNEL.md
+connections/<slug>/CONNECTION.md
+extensions/<system>/        other systems' data, namespaced
+```
 
 ## Local development
 

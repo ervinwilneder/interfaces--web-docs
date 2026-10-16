@@ -1,0 +1,43 @@
+# The manifest
+
+`POF.md`, at the root of the bundle, says what the bundle is. It is the
+only required file: a reader checks it before reading anything else.
+
+```yaml filename="POF.md"
+---
+type: Bundle
+format: pof
+revision: 2026-10-16
+as_of: 2026-10-16T12:43:25.205Z
+counts:
+  pieces: 21
+  subentities: 10
+  links: 37
+  commits: 49
+  changes: 92
+extensions:
+  - hub
+  - data
+  - growth
+  - loops
+  - whatsapp
+  - agents
+---
+```
+
+## Fields
+
+| Field | Required | Notes |
+|---|---|---|
+| `type` | Yes | Always `Bundle`. |
+| `format` | Yes | Always `pof`. |
+| `revision` | Yes | The revision of this spec the bundle follows, as a date: `2026-10-16`. |
+| `as_of` | No | The moment the bundle describes, in ISO 8601. A writer that keeps history dates it by its last commit, so the same content gives the same manifest. |
+| `counts` | No | How much the core holds: `pieces`, `subentities`, `links` and, with history, `commits` and `changes`. A reader can compare them with what it read. |
+| `extensions` | No | The names of the folders under `extensions/`, one per [extension](/format/extensions). |
+
+The manifest does not name the organization: a bundle can be imported
+under any name.
+
+The body of `POF.md` is free. A writer can leave it empty or explain the
+bundle in prose.

@@ -2,76 +2,62 @@ import { Callout } from "nextra/components";
 
 # Why POF
 
-This project treats organizational knowledge as **portable data first,
-product second.** Everything below follows from that one sentence.
+An organization's operation is spread across systems: who does what in
+one, the procedures in another, the approval rules in a third, the goals
+in a spreadsheet, the channels and integrations in each tool's settings.
+None of it can be taken somewhere else whole, and no agent can read it
+whole either.
 
-## Zero-friction by default
+POF treats the organization as **data first**: one bundle of plain
+files that any system can write, any other can import, and a person or
+an agent can read as it is.
 
-Most tools that want to hold your organization's knowledge start by
-asking for an account. The reference implementation starts by giving you
-one anyway: the instant anyone lands — a person or an agent — a real,
-credential-less user is created for them, and the four sections
-([Roles](/format/roles), [Skills](/format/skills),
-[Notebooks](/format/notebooks), [Wiki](/format/wiki)) are already there
-to use.
+## The organization, not one system's view of it
 
-"Claiming" that account later — signing up while you already have that
-session — doesn't start you over. It migrates ownership of everything
-you've already created, and every access grant an agent already holds,
-onto the new account, before the anonymous one is discarded. Trying the
-thing before deciding to keep it costs nothing, and nothing you build
-while trying it is at risk of being thrown away.
+The core types are concepts of an organization, not of a product: every
+organization has [roles](/format/roles), knows how to do things
+([skills](/format/skills)), decides who handles what
+([policies](/format/policies)), commits to
+[objectives](/format/objectives), repeats
+[routines](/format/routines), talks through
+[channels](/format/channels) and reaches other systems through
+[connections](/format/connections). Any system that holds one of them
+writes it with the same shape.
 
-This matters more for an agent than it does for a person. A person can
-tolerate a sign-up form once. An agent evaluating "should I bother
-integrating with this," in the middle of doing something else entirely,
-usually won't — friction at the front door is a real, measurable tax on
-whether an agent-facing surface gets used at all.
+What is particular to one system, it writes as an
+[extension](/format/extensions), under its own namespace. The core stays
+small and stable; the extensions carry everything else without asking
+the spec for room.
 
-## One source of truth per action
+## Readable without the app
 
-Three different [access surfaces](/surfaces) exist so that three
-different kinds of agents can reach the same workspace on their own
-terms — one sharing your browser tab, one you've approved once, one
-speaking a standard remote protocol. All three call the exact same
-underlying functions to read or write a document.
+Every piece is a Markdown file a person can open in a text editor. Its
+fields are YAML. Its relations are paths you can follow with `cd`. There
+is no binary format to decode and no id to look up in a database that is
+not there.
 
 <Callout type="info">
-  There is exactly one implementation of `create_role` — not three
-  slightly different ones that happen to agree most of the time.
+  If the system that wrote a bundle disappears, the bundle still says
+  everything it said the day it was written.
 </Callout>
 
-That single-implementation constraint isn't an implementation detail
-worth skipping over. It's the actual guarantee being made: whichever door
-an agent uses, it sees and changes the same thing you see, under the same
-rules, at the same time. It also means a new rule (a validation, a quota,
-a new required field) is written once and is immediately true everywhere
-— there's no surface that's quietly a version behind.
+## Portable means importable
 
-## Portable, not platform-locked
+A bundle is meant to be imported, not only archived. That is why:
 
-The whole point of the name is in the second word as much as the first.
-A workspace built on POF exports as an ordinary folder of Markdown
-files — no proprietary export format, no lock-in step, nothing left
-behind that only this particular app can read. See
-[The export bundle](/format/export) for exactly what that folder looks
-like. The app is an editor over that data. It is not the data's owner.
+- identity is the folder, so a piece arrives as the same piece in any
+  system;
+- relations are paths, so they survive new ids;
+- the history is optional but exact, so an organization can arrive with
+  its past or start fresh at the import;
+- access state stays out, so moving a bundle never moves a credential.
 
-If this project disappeared tomorrow, what you built with it wouldn't.
-That's not a hedge against the project failing — it's a design
-consequence of the format being the actual product, and the app being one
-convenient way to work with it.
+## Diffable
 
-## What this actually is
-
-This documentation describes a format and an architecture, illustrated
-against one real, working reference implementation: a small ops
-workspace covering Roles, Skills, Notebooks, and a Wiki, built for the
-OpenAI WebMCP Challenge. The format doesn't depend on that implementation
-existing — but seeing it against something real, rather than only in the
-abstract, is the point of this documentation. Every field name, tool
-name, and example in these pages is checked against that implementation's
-actual source, not invented for illustration.
+A writer produces the same bytes for the same content. Two exports of an
+organization, a week apart, can be compared with `diff`: what changed in
+a role, which rule was added to a policy, which objective moved. The
+history inside the bundle says who changed it and why.
 
 Continue with [POF vs. MCP vs. Agent Skills](/concepts/pof-vs-mcp-vs-skills)
-for how this fits next to the two things it gets compared to most often.
+for how POF sits next to the two things it is compared with most.

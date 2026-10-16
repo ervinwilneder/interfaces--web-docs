@@ -1,28 +1,116 @@
-# The format
+import { FileTree } from "nextra/components";
 
-Every POF document is a Markdown file with a YAML frontmatter block, built
-to [OKF](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md)
-(Open Knowledge Format) v0.2. OKF §10 requires only that `type` be present
-and non-empty; `title`, `description`, and `tags` are OKF's recommended
-family per §4. Everything past that is POF-specific — one shape per
-document type, described in full on its own page.
+# The bundle
 
-Two small conventions apply everywhere, not just to one type: a field
-that has no value is simply **absent** from the frontmatter — never
-written out empty — and a list item can be either a plain scalar
-(`- item`) or a `key: value` pair (`- key: value`), depending on what
-that field needs to carry. See [Documents and slugs](/concepts/documents-and-slugs)
-for how titles turn into the `name` field you'll see in every example.
+A POF bundle is a zip (or a folder) of UTF-8 Markdown files, each with a
+YAML frontmatter block, conformant to
+[OKF](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md)
+(Open Knowledge Format) v0.2. This page is revision **2026-10-16**.
 
-## The four document types, at a glance
+## Layout
 
-| Type | Required | Optional | Body |
+<FileTree>
+  <FileTree.File name="POF.md" />
+  <FileTree.File name="COMMITS.md" />
+  <FileTree.File name="HISTORY.md" />
+  <FileTree.Folder name="roles" defaultOpen>
+    <FileTree.Folder name="<team>" defaultOpen>
+      <FileTree.Folder name="<slug>" defaultOpen>
+        <FileTree.File name="ROLE.md" />
+        <FileTree.File name="HISTORY.md" />
+        <FileTree.Folder name="annotations">
+          <FileTree.File name="<n>.md" />
+        </FileTree.Folder>
+      </FileTree.Folder>
+    </FileTree.Folder>
+  </FileTree.Folder>
+  <FileTree.Folder name="skills" defaultOpen>
+    <FileTree.Folder name="<slug>" defaultOpen>
+      <FileTree.File name="SKILL.md" />
+      <FileTree.Folder name="files">
+        <FileTree.File name="<nn>-<slug>.md" />
+      </FileTree.Folder>
+    </FileTree.Folder>
+  </FileTree.Folder>
+  <FileTree.Folder name="policies" defaultOpen>
+    <FileTree.Folder name="<slug>" defaultOpen>
+      <FileTree.File name="POLICY.md" />
+      <FileTree.Folder name="rules">
+        <FileTree.File name="<nn>-<slug>.md" />
+      </FileTree.Folder>
+    </FileTree.Folder>
+  </FileTree.Folder>
+  <FileTree.Folder name="objectives" defaultOpen>
+    <FileTree.Folder name="<slug>" defaultOpen>
+      <FileTree.File name="OBJECTIVE.md" />
+      <FileTree.Folder name="key-results">
+        <FileTree.File name="<nn>-<slug>.md" />
+      </FileTree.Folder>
+    </FileTree.Folder>
+  </FileTree.Folder>
+  <FileTree.Folder name="routines">
+    <FileTree.Folder name="<slug>">
+      <FileTree.File name="ROUTINE.md" />
+    </FileTree.Folder>
+  </FileTree.Folder>
+  <FileTree.Folder name="channels">
+    <FileTree.Folder name="<slug>">
+      <FileTree.File name="CHANNEL.md" />
+    </FileTree.Folder>
+  </FileTree.Folder>
+  <FileTree.Folder name="connections">
+    <FileTree.Folder name="<slug>">
+      <FileTree.File name="CONNECTION.md" />
+    </FileTree.Folder>
+  </FileTree.Folder>
+  <FileTree.Folder name="extensions">
+    <FileTree.Folder name="<system>">
+      <FileTree.File name="EXTENSION.md" />
+    </FileTree.Folder>
+  </FileTree.Folder>
+</FileTree>
+
+| Path | What it is |
+|---|---|
+| `POF.md` | The [manifest](/format/manifest). Required. |
+| `COMMITS.md`, `HISTORY.md` | The [history](/format/history). Optional. |
+| `<family>/<slug>/<TYPE>.md` | A piece of the core. The file is named after its type in capitals. |
+| `roles/<team>/<slug>/ROLE.md` | Roles are the one family with two levels: the team's folder, then the role's. |
+| `<piece>/rules/`, `key-results/`, `files/` | A piece's [subentities](/format/documents#subentities), one file each, named `<nn>-<slug>.md`. |
+| `<piece>/annotations/<n>.md` | [Annotations](/format/documents#annotations) on a piece, numbered from 1. |
+| `<piece>/HISTORY.md` | The piece's changes, when the bundle carries its history. |
+| `extensions/<system>/` | Another system's data, with its own `EXTENSION.md`. See [Extensions](/format/extensions). |
+
+Slugs are lowercase ASCII letters and digits separated by single hyphens
+(`[a-z0-9]+(-[a-z0-9]+)*`). Nothing else lives at the root or inside the
+core folders: a file that is not in this layout belongs under
+`extensions/`.
+
+## The core
+
+The core is what every organization has, whatever system it runs on.
+
+| Type | Folder | `kind` | Body |
 |---|---|---|---|
-| [**Role**](/format/roles) (`type: Role`) | `title`, `name` | `team`, `person` | Fixed headings — `# Identity`, `# Operating frame`, `# Purpose`, `# Rules` — then any number of free custom headings. |
-| [**Skill**](/format/skills) (`type: Skill`) | `title`, `description`, `name`, `category` | `domain`, `endorse`, `roles` | Fully free-form headings — no fixed shape at all. |
-| [**Notebook**](/format/notebooks) (`type: Notebook`) | `title`, `name` | `description`, `project`, `domains`, `roles`, `sources` | Just a heading and an optional summary. Notes are separate, untitled files under `notes/`, one per timestamp. |
-| [**Wiki object**](/format/wiki) (`type` = the entity's own name, e.g. `Vendor`) | `title`, `name` | `resource`, `tags`, `metadata` | Free-form. |
+| [Role](/format/roles) | `roles/<team>/<slug>/ROLE.md` | none | instructions |
+| [Skill](/format/skills) | `skills/<slug>/SKILL.md` | none | instructions |
+| [Policy](/format/policies) | `policies/<slug>/POLICY.md` | none | description |
+| [Objective](/format/objectives) | `objectives/<slug>/OBJECTIVE.md` | `strategic`, `tactical`, `operational` | description |
+| [Routine](/format/routines) | `routines/<slug>/ROUTINE.md` | none | goal |
+| [Channel](/format/channels) | `channels/<slug>/CHANNEL.md` | the platform | description |
+| [Connection](/format/connections) | `connections/<slug>/CONNECTION.md` | `mcp`, `openapi` | description |
 
-Each type's own page covers its fields in full, a worked example, and the
-edge cases worth knowing. [The export bundle](/format/export) shows how
-all four look laid out together, on disk, in one workspace.
+Three subentity types hang from a piece: [Rule](/format/policies#rules)
+under a policy, [KeyResult](/format/objectives#key-results) under an
+objective, and [File](/format/skills#files) under a skill.
+
+Every document of the core shares the same frontmatter conventions:
+`type`, `kind`, `title`, `name`, the attributes as fields, `tags`,
+`links`, dates and authors. See [Documents and links](/format/documents).
+
+## What stays out
+
+A bundle carries the organization, not the access to it. Keys,
+credentials, tokens, sessions, queues and subscriptions are never
+written, in the core or in an extension. Whoever imports a bundle sets up
+access again, on purpose.
