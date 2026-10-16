@@ -1,0 +1,64 @@
+import { Callout } from "nextra/components";
+
+# Over MCP
+
+An agent can also work on an organization live. The reference
+implementation serves the core over an MCP server, with a single tool,
+`fs`, that works like a small filesystem. It uses the same paths, types
+and fields as the [bundle](/format), built by the same code that writes
+the export.
+
+## The tree
+
+```
+roles/<team>/<slug>/ROLE.md
+skills/<slug>/SKILL.md              + files/<nn>-<slug>.md
+policies/<slug>/POLICY.md           + rules/<nn>-<slug>.md
+objectives/<slug>/OBJECTIVE.md      + key-results/<nn>-<slug>.md
+routines/<slug>/ROUTINE.md
+channels/<slug>/CHANNEL.md
+connections/<slug>/CONNECTION.md
+<any piece>/annotations/<n>.md
+```
+
+Every document reads exactly as in the bundle: `type`, `kind`, `title`,
+`name`, the attributes as fields, `tags`, and `links` as paths. The body
+is the instructions, goal or description.
+
+`fs` does not carry the [history](/format/history) (`COMMITS.md` and
+`HISTORY.md`), the [extensions](/format/extensions), or the dates and
+sizes of subentity files.
+
+## Operations
+
+| `operation` | Does |
+|---|---|
+| `pull` | Returns every file the connection can see, with its content, plus a `checkpoint`: a timestamp per path. |
+| `list` | Returns every path, without content. |
+| `read` | Reads one file, by `path`. |
+| `write` | Writes one file, by `path` and `content`. |
+| `push` | Writes several files at once (`files`: path to content), with the `checkpoint` of the last pull. |
+| `delete` | Archives a piece, or takes a file out of its skill. Nothing is erased: an archived piece can be restored. |
+
+The intended pattern is a checkout: `pull` once, edit the files locally
+with any tool, then `push` with the checkpoint. Each file is applied on
+its own. It comes back `applied` if nothing changed remotely since the
+checkpoint, or `conflict` (with the current remote version) if something
+did. Without a checkpoint for a path, the push overwrites. A client with
+no local disk uses `read`, `write` and `delete` on one path at a time.
+
+## What it writes
+
+Through `fs` an agent writes every piece except roles (skills, policies,
+objectives, routines, channels and connections), and a skill's files.
+Roles, a policy's rules, an objective's key results and annotations are
+read-only through `fs`.
+
+A write replaces the whole piece: an attribute or a link left out of the
+file is removed. A new file lands at the path it is written to, and its
+slug comes from its folder.
+
+<Callout type="info">
+  A connection can be scoped to one role. It then sees that role's own
+  `ROLE.md` and the pieces linked to it, and nothing else.
+</Callout>
