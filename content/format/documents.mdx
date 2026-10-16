@@ -91,6 +91,22 @@ Each link is written once, on one side. A reader that wants the other
 direction (the skills a role uses, the objectives a routine moves) looks
 for links whose `to` is the piece.
 
+### Paths across the bundle
+
+Every relation in a bundle is a path, in the core and in the
+[extensions](/format/extensions):
+
+- The core lives at the root, so its paths already start there:
+  `roles/mayorista/atencion`. To point into an extension, a core path
+  goes through its folder: `extensions/<system>/…`.
+- Inside an extension, paths are relative to the extension's folder.
+- An extension that points outside its folder writes a path from the
+  root with a leading `/`: `/roles/mayorista/atencion`,
+  `/extensions/data/artifacts/stock`.
+
+A reader resolves a path that starts with `/` against the root of the
+bundle.
+
 ## Subentities
 
 Some pieces carry items of their own: a policy's rules, an objective's

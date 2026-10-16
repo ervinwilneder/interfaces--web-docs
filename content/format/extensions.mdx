@@ -41,6 +41,7 @@ type: Extension
 name: hub
 system: nicetry hub
 format: hub-export/1
+spec: https://hub-a29r.onrender.com/llms.txt
 ---
 Los datos de hub de Casa Norte, como los exporta el engine.
 ```
@@ -80,6 +81,18 @@ A type without a dot is a core type; a type with one (`hub.deal`,
 dot. An extension can describe its own types (their fields, what each
 one means) in documents of its own, so that a reader understands them
 without knowing the system. An extension can carry binary files too.
+
+## References
+
+Inside an extension, paths are relative to its folder. To point outside
+it, at the core or at another extension, an extension writes a path from
+the root of the bundle with a leading `/`: `/roles/mayorista/atencion`,
+`/extensions/data/artifacts/stock`. The core points into an extension
+through its folder, `extensions/<system>/…`. A reader resolves a path
+that starts with `/` against the root of the bundle. See
+[Paths across the bundle](/format/documents#paths-across-the-bundle).
+
+## History
 
 An extension can keep its own history (its `COMMITS.md` and
 `HISTORY.md`), with the same shape as the [core's](/format/history).

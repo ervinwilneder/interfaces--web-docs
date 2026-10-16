@@ -48,9 +48,55 @@ changes:
     entity: subentity
     target: rules/001-proveedor-nuevo-direccion
     diff:
-      attributes.title:
+      then:
+        from: null
+        to:
+          method: fixed
+          target: direccion/socio-comercial
+      title:
         from: null
         to: "Proveedor nuevo: dirección"
+      when:
+        from: null
+        to:
+          op: equals
+          path: supplier_new
+          value: true
+      position:
+        from: null
+        to: 0
+      piece:
+        from: null
+        to: policies/aprobacion-de-compras
+      type:
+        from: null
+        to: Rule
+---
+```
+
+```yaml filename="objectives/crecer-canal-mayorista-q4/HISTORY.md"
+---
+type: History
+changes:
+  - at: 2026-10-16T11:29:57.867Z
+    commit: 29279938-d8bc-498a-b84d-0e6d2f84155a
+    action: create
+    entity: association
+    target: impacted_by routines/calificar-consulta-mayorista
+    related: routines/calificar-consulta-mayorista
+    diff:
+      from:
+        from: null
+        to: objectives/crecer-canal-mayorista-q4
+      role:
+        from: null
+        to: impacted_by
+      to_type:
+        from: null
+        to: Routine
+      to:
+        from: null
+        to: routines/calificar-consulta-mayorista
 ---
 ```
 
@@ -60,8 +106,24 @@ changes:
 | `commit` | The id of its commit in `COMMITS.md`. |
 | `action` | What happened: `create`, `update`, `archive`, `restore`, `delete`… |
 | `entity` | What it touched: `record` (the piece itself), `subentity` or `association` (a link). |
-| `target` | For a subentity, its path inside the piece (`rules/001-…`); for a link, its role and the other piece's folder (`used_by roles/mayorista/atencion`). |
-| `diff` | Each field that changed, with its `from` and `to`. Ids of pieces are written as their folders. |
+| `target` | For a subentity, its path inside the piece (`rules/001-…`); for a link, its role and the other piece's folder (`impacted_by routines/calificar-consulta-mayorista`). |
+| `related` | For a link, the folder of the other piece. |
+| `entity_id` | For what is no longer in the bundle, the id the history gave it, in place of `target`. |
+| `diff` | Each field that changed, with its `from` and `to`. See below. |
+
+### The diff speaks the files
+
+A diff names fields the way the documents write them:
+
+| Change of | Fields in the diff |
+|---|---|
+| a piece | `type` (`Policy`, `Objective`…), `kind`, `name`, `title`, `tags`, `archived_at` and each attribute by its own name (`goal`, `require_catch_all`). |
+| a subentity | `piece` (the folder of its piece), `type` (`Rule`, `KeyResult`, `File`), `position`, `archived_at` and each attribute by its own name (`title`, `when`, `then`). |
+| a link | `from` and `to` (folders), `to_type` (the POF type of `to`), `role`, `archived_at`. |
+
+An attribute whose name is one of those fields keeps an `attributes.`
+prefix in the diff. Pieces are always named by their folders, never by
+ids.
 
 A `HISTORY.md` at the root keeps the changes of what is no longer a
 piece of the bundle, named by the ids the history gave them.
