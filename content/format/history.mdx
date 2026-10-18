@@ -139,6 +139,10 @@ Relations toward something deleted use that same last path. A
 `HISTORY.md` at the root keeps the changes whose piece is no longer in
 the bundle. An importer gives a new id to each thing it finds named.
 
+The only id in a bundle is a commit's own: commits are identified by
+their `id`, like a git hash, and `commit:` and `reverts` reference it.
+Everything else goes by path.
+
 <Callout type="info">
   The history and the snapshot must agree: replaying every change in
   order gives the pieces as they are written. A `HISTORY.md` without a
