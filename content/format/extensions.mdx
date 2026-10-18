@@ -132,7 +132,8 @@ updated_by: user:equipo@acme.example
 Confirmá productos y cantidades, usá la lista de precios vigente y agendá el seguimiento.
 ```
 
-Its own manifest, `data.md`, is a `data.Export`, and it describes its
+Its own manifest, `data.md`, is a `data.Export` dated by the `as_of` of
+its content (its last commit, never the export), and it describes its
 types in `structure/` as `data.Type`, `data.Subtype` and `data.Family`
 documents. An annotation inside an extension has the same shape as in
 the core:

@@ -52,5 +52,7 @@ A writer produces the same bundle for the same content: keys in a
 stable order, subentities in their order, the manifest dated by the
 last commit rather than by the moment of export. Neither the bundle nor
 the manifests of its extensions carry the client's name or the date of
-the export. An export and an import followed by another export give the
-same bytes, and a diff between two exports shows exactly what changed.
+the export; they do carry `as_of`, the date of their content, which is
+the date of its last commit. That is why an export, an import and
+another export give the same bytes, and a diff between two exports
+shows exactly what changed.
