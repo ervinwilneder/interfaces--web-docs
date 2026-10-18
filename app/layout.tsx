@@ -14,7 +14,7 @@ export const metadata = {
     template: "%s — POF",
   },
   description:
-    "POF (Portable Organization Format): a whole organization as one bundle of Markdown files (roles, skills, policies, objectives, routines, channels and connections) that a person, an agent and another system can read and import.",
+    "POF (Portable Organization Format): a whole organization as one bundle of Markdown files (roles, skills, policies, OKRs, routines, channels and connections) that a person, an agent and another system can read and import.",
 };
 
 // Same mark as app/icon.svg (the browser-tab favicon), fixed dark/light

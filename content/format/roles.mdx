@@ -8,13 +8,13 @@ does an agent acting in it.
 
 <FileTree>
   <FileTree.Folder name="roles" defaultOpen>
-    <FileTree.Folder name="administracion" defaultOpen>
-      <FileTree.Folder name="gerenta" defaultOpen>
+    <FileTree.Folder name="soporte" defaultOpen>
+      <FileTree.Folder name="atencion" defaultOpen>
         <FileTree.File name="ROLE.md" />
       </FileTree.Folder>
     </FileTree.Folder>
-    <FileTree.Folder name="mayorista" defaultOpen>
-      <FileTree.Folder name="atencion" defaultOpen>
+    <FileTree.Folder name="ventas" defaultOpen>
+      <FileTree.Folder name="vendedor" defaultOpen>
         <FileTree.File name="ROLE.md" />
       </FileTree.Folder>
     </FileTree.Folder>
@@ -36,39 +36,23 @@ Besides the [common fields](/format/documents#frontmatter-of-a-piece):
 
 ## Body
 
-The body is the role's **instructions**, in free Markdown. A common shape
-is four headings: who the role is, the frame it works in, its purpose and
-its rules.
+The body is the role's **instructions**, in free Markdown: what the role
+is for, how it works and what it must never do.
 
 ## Example
 
-```yaml filename="roles/administracion/gerenta/ROLE.md"
+```yaml filename="roles/ventas/vendedor/ROLE.md"
 ---
 type: Role
-title: Gerenta administrativa
-name: gerenta
-team: administracion
-created_at: 2026-10-15T15:47:23.164Z
-updated_at: 2026-10-16T12:08:14.866Z
+title: Vendedor
+name: vendedor
+team: ventas
+created_at: 2026-10-18T15:12:02.221Z
+updated_at: 2026-10-18T15:12:02.305Z
+created_by: user:equipo@acme.example
+updated_by: user:equipo@acme.example
 ---
-# Identidad
-Asistís a Verónica, gerenta administrativa de Casa Norte. Sos ordenada:
-todo lo que se decide queda escrito en la actividad que corresponde.
-
-# Marco operativo
-- Aprobaciones de órdenes de compra según la política
-  `aprobacion-de-compras`: franja media la aprobás vos; franja alta va a
-  Martín.
-- Conciliación de cheques diferidos con proveedores (skill
-  `conciliar-cheques`).
-
-# Propósito
-Que cada OC tenga su historia completa en un solo lugar y que nada
-administrativo dependa de la memoria de alguien.
-
-# Reglas
-- No emitís cheques ni marcás pagos como hechos: eso lo hace
-  administración a mano.
+Atendés las consultas de clientes nuevos, cotizás y hacés el seguimiento hasta que compran o descartan. Las de empresas tienen prioridad.
 ```
 
 ## What points at a role
@@ -76,4 +60,4 @@ administrativo dependa de la memoria de alguien.
 A role writes no links of its own. Other pieces point at it:
 [skills](/format/skills), [routines](/format/routines),
 [channels](/format/channels) and [connections](/format/connections) with
-`used_by`, and [objectives](/format/objectives) with `owned_by`.
+`used_by`, and [OKRs](/format/okrs) with `owned_by`.

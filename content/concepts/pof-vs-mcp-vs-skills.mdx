@@ -13,7 +13,7 @@ sit next to each other, not on top of each other.
 
 Put plainly: **MCP is the wire, an Agent Skill is one capability an agent
 loads on demand, and POF is the organization those capabilities belong
-to**: its roles, its skills, its policies, its objectives, its routines,
+to**: its roles, its skills, its policies, its OKRs, its routines,
 its channels and its connections, linked to each other.
 
 ## They compose
@@ -25,7 +25,7 @@ graph TD
   end
   subgraph "Content"
     Skill["Agent Skill<br/>(a capability, loaded on demand)"]
-    POF["POF bundle<br/>(roles, skills, policies, objectives,<br/>routines, channels, connections)"]
+    POF["POF bundle<br/>(roles, skills, policies, OKRs,<br/>routines, channels, connections)"]
   end
   MCP --> Skill
   MCP --> POF

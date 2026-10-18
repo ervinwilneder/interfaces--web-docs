@@ -11,19 +11,17 @@ namespace.
 <FileTree>
   <FileTree.File name="POF.md" />
   <FileTree.Folder name="extensions" defaultOpen>
-    <FileTree.Folder name="hub" defaultOpen>
-      <FileTree.File name="EXTENSION.md" />
-      <FileTree.File name="COMMITS.md" />
-      <FileTree.Folder name="structure" />
-      <FileTree.Folder name="pipelines" />
-      <FileTree.Folder name="records" />
-    </FileTree.Folder>
     <FileTree.Folder name="data" defaultOpen>
       <FileTree.File name="EXTENSION.md" />
-      <FileTree.Folder name="notebooks" />
-      <FileTree.Folder name="wikis" />
-      <FileTree.Folder name="artifacts" />
-      <FileTree.Folder name="blobs" />
+      <FileTree.File name="COMMITS.md" />
+      <FileTree.File name="data.md" />
+      <FileTree.Folder name="notebooks" defaultOpen>
+        <FileTree.Folder name="reunion-semanal" />
+      </FileTree.Folder>
+      <FileTree.Folder name="wikis" defaultOpen>
+        <FileTree.Folder name="manual-de-ventas" />
+      </FileTree.Folder>
+      <FileTree.Folder name="structure" />
     </FileTree.Folder>
   </FileTree.Folder>
 </FileTree>
@@ -35,15 +33,15 @@ Anyone can write an extension, for any system, without asking the spec:
 
 Every extension starts with its manifest:
 
-```yaml filename="extensions/hub/EXTENSION.md"
+```yaml filename="extensions/data/EXTENSION.md"
 ---
 type: Extension
-name: hub
-system: nicetry hub
-format: hub-export/1
-spec: https://hub-a29r.onrender.com/llms.txt
+name: data
+system: nicetry data
+format: data-export/1
+spec: https://data-mesk.onrender.com/llms.txt
 ---
-Los datos de hub de Casa Norte, como los exporta el engine.
+The notebooks and wikis of the business, as the nicetry data engine exports them (its own format, `data.md` is its manifest).
 ```
 
 | Field | Required | Notes |
@@ -51,7 +49,7 @@ Los datos de hub de Casa Norte, como los exporta el engine.
 | `type` | Yes | Always `Extension`. |
 | `name` | Yes | The namespace, the same as the folder. It is listed in the bundle's [manifest](/format/manifest) under `extensions`. |
 | `system` | Yes | The system that produced it. |
-| `format` | Yes | The format of its contents, as that system names it (`hub-export/1`). |
+| `format` | Yes | The format of its contents, as that system names it (`data-export/1`). |
 | `spec` | No | A link to the documentation of that format. |
 
 ## Inside an extension
@@ -62,23 +60,10 @@ folder, relations as paths, access state left out. Beyond that, its
 layout is its system's.
 
 Its types carry its namespace, so a document says which system it
-belongs to wherever it ends up:
-
-```yaml filename="extensions/data/notebooks/direccion/NOTEBOOK.md"
----
-type: data.notebook
-title: Dirección
-tags:
-  - direccion
-created_at: 2026-10-15T15:57:21.575Z
-updated_at: 2026-10-15T15:57:21.575Z
----
-Las notas de la reunión de dirección de los lunes: riesgo, dato y decisión.
-```
-
-A type without a dot is a core type; a type with one (`hub.deal`,
-`data.Artifact`, `loops.Run`) belongs to the extension named before the
-dot. An extension can describe its own types (their fields, what each
+belongs to wherever it ends up: the data extension writes
+`type: data.notebook`, `type: data.wiki` and `type: data.page`. A type
+without a dot is a core type; a type with one belongs to the extension
+named before the dot. An extension can describe its own types (their fields, what each
 one means) in documents of its own, so that a reader understands them
 without knowing the system. An extension can carry binary files too.
 
@@ -86,8 +71,8 @@ without knowing the system. An extension can carry binary files too.
 
 Inside an extension, paths are relative to its folder. To point outside
 it, at the core or at another extension, an extension writes a path from
-the root of the bundle with a leading `/`: `/roles/mayorista/atencion`,
-`/extensions/data/artifacts/stock`. The core points into an extension
+the root of the bundle with a leading `/`: `/roles/ventas/vendedor`,
+`/extensions/data/wikis/manual-de-ventas`. The core points into an extension
 through its folder, `extensions/<system>/…`. A reader resolves a path
 that starts with `/` against the root of the bundle. See
 [Paths across the bundle](/format/documents#paths-across-the-bundle).
@@ -95,7 +80,9 @@ that starts with `/` against the root of the bundle. See
 ## History
 
 An extension can keep its own history (its `COMMITS.md` and
-`HISTORY.md`), with the same shape as the [core's](/format/history).
+`HISTORY.md`), with the same shape and the same rules as the
+[core's](/format/history): types by `type`, with the extension's
+namespace (`data.notebook`), and everything named by path, never by id.
 
 <Callout type="info">
   **Readers keep what they do not know.** A reader that does not know an

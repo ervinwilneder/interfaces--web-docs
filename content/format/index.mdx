@@ -5,7 +5,7 @@ import { FileTree } from "nextra/components";
 A POF bundle is a zip (or a folder) of UTF-8 Markdown files, each with a
 YAML frontmatter block, conformant to
 [OKF](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md)
-(Open Knowledge Format) v0.2. This page is revision **2026-10-16**.
+(Open Knowledge Format) v0.2. This page is revision **2026-10-18**.
 
 ## Layout
 
@@ -40,9 +40,9 @@ YAML frontmatter block, conformant to
       </FileTree.Folder>
     </FileTree.Folder>
   </FileTree.Folder>
-  <FileTree.Folder name="objectives" defaultOpen>
+  <FileTree.Folder name="okrs" defaultOpen>
     <FileTree.Folder name="<slug>" defaultOpen>
-      <FileTree.File name="OBJECTIVE.md" />
+      <FileTree.File name="OKR.md" />
       <FileTree.Folder name="key-results">
         <FileTree.File name="<nn>-<slug>.md" />
       </FileTree.Folder>
@@ -95,14 +95,14 @@ The core is what every organization has, whatever system it runs on.
 | [Role](/format/roles) | `roles/<team>/<slug>/ROLE.md` | none | instructions |
 | [Skill](/format/skills) | `skills/<slug>/SKILL.md` | none | instructions |
 | [Policy](/format/policies) | `policies/<slug>/POLICY.md` | none | description |
-| [Objective](/format/objectives) | `objectives/<slug>/OBJECTIVE.md` | `strategic`, `tactical`, `operational` | description |
+| [OKR](/format/okrs) | `okrs/<slug>/OKR.md` | `strategic`, `tactical`, `operational` | description |
 | [Routine](/format/routines) | `routines/<slug>/ROUTINE.md` | none | goal |
 | [Channel](/format/channels) | `channels/<slug>/CHANNEL.md` | the platform | description |
 | [Connection](/format/connections) | `connections/<slug>/CONNECTION.md` | `mcp`, `openapi` | description |
 
 Three subentity types hang from a piece: [Rule](/format/policies#rules)
-under a policy, [KeyResult](/format/objectives#key-results) under an
-objective, and [File](/format/skills#files) under a skill.
+under a policy, [KeyResult](/format/okrs#key-results) under an
+OKR, and [File](/format/skills#files) under a skill.
 
 Every document of the core shares the same frontmatter conventions:
 `type`, `kind`, `title`, `name`, the attributes as fields, `tags`,

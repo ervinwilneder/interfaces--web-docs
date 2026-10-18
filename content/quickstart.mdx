@@ -3,19 +3,19 @@ import { Callout, Steps } from "nextra/components";
 # Quickstart
 
 A POF bundle is a zip of Markdown files, so nothing here needs more than
-a shell. The examples come from `casa-norte.pof.zip`, the bundle of a
-demo retailer with the core and six extensions.
+a shell. The examples come from `ejemplo.pof.zip`, the bundle of a small
+fictional company: the whole core and one extension, data.
 
 <Steps>
 
 ### Open it
 
 ```bash
-unzip casa-norte.pof.zip -d casa-norte
-cd casa-norte
+unzip ejemplo.pof.zip -d ejemplo
+cd ejemplo
 ls
-# COMMITS.md  POF.md  channels  connections  extensions  objectives
-# policies  roles  routines  skills
+# COMMITS.md  POF.md  channels  connections  extensions  okrs  policies
+# roles  routines  skills
 ```
 
 ### Read the manifest
@@ -28,21 +28,16 @@ it carries.
 ---
 type: Bundle
 format: pof
-revision: 2026-10-16
-as_of: 2026-10-16T12:43:25.205Z
+revision: 2026-10-18
+as_of: 2026-10-18T15:12:02.309Z
 counts:
-  pieces: 21
-  subentities: 10
-  links: 37
-  commits: 49
-  changes: 92
+  pieces: 8
+  subentities: 4
+  links: 9
+  commits: 10
+  changes: 23
 extensions:
-  - hub
   - data
-  - growth
-  - loops
-  - whatsapp
-  - agents
 ---
 ```
 
@@ -56,38 +51,44 @@ Every core piece is one file named after its type, in its own folder:
 ```bash
 find . -path ./extensions -prune -o -name '[A-Z]*.md' -print \
   | grep -v -e HISTORY -e COMMITS -e POF.md | sort
-# ./channels/whatsapp-mayorista/CHANNEL.md
-# ./connections/greatmove-actividades/CONNECTION.md
-# ./objectives/crecer-canal-mayorista-q4/OBJECTIVE.md
-# ./policies/aprobacion-de-compras/POLICY.md
-# ./roles/administracion/gerenta/ROLE.md
-# ./routines/calificar-consulta-mayorista/ROUTINE.md
-# ./skills/calificar-consulta-mayorista/SKILL.md
-# ...
+# ./channels/whatsapp-ventas/CHANNEL.md
+# ./connections/calendario/CONNECTION.md
+# ./okrs/crecer-en-empresas/OKR.md
+# ./policies/asignacion-de-consultas/POLICY.md
+# ./roles/soporte/atencion/ROLE.md
+# ./roles/ventas/vendedor/ROLE.md
+# ./routines/seguimiento-de-consultas/ROUTINE.md
+# ./skills/cotizar/SKILL.md
 ```
 
 ### Follow a link
 
-Links are paths. The objective says who owns it and which routines move
-it:
+Links are paths. The OKR says who owns it and which routine moves it:
 
-```yaml filename="objectives/crecer-canal-mayorista-q4/OBJECTIVE.md"
+```yaml filename="okrs/crecer-en-empresas/OKR.md"
 ---
-type: Objective
+type: OKR
 kind: tactical
-title: Crecer el canal mayorista en el último trimestre
-name: crecer-canal-mayorista-q4
-goal: Crecer en el interior
+title: Crecer en empresas
+name: crecer-en-empresas
+goal: Crecer en el segmento empresas
 links:
   - role: impacted_by
-    to: routines/calificar-consulta-mayorista
+    to: routines/seguimiento-de-consultas
+    created_at: 2026-10-18T15:12:02.293Z
   - role: owned_by
-    to: roles/mayorista/atencion
+    to: roles/ventas/vendedor
+    created_at: 2026-10-18T15:12:02.293Z
+created_at: 2026-10-18T15:12:02.293Z
+updated_at: 2026-10-18T15:12:02.293Z
+created_by: user:equipo@acme.example
+updated_by: user:equipo@acme.example
 ---
+Más consultas de empresas y más cierres en el trimestre.
 ```
 
-`routines/calificar-consulta-mayorista` is a folder in the same bundle;
-open its `ROUTINE.md` and you are there. See
+`routines/seguimiento-de-consultas` is a folder in the same bundle; open
+its `ROUTINE.md` and you are there. See
 [Documents and links](/format/documents#links).
 
 ### Read the history, if it is there
@@ -98,10 +99,10 @@ without them is a snapshot. See [History](/format/history).
 
 ### Leave the extensions alone
 
-`extensions/` holds what other systems exported: a CRM's pipelines, a
-data platform's notebooks, a WhatsApp inbox. Each has an `EXTENSION.md`
-that says which system wrote it and in what format. A reader that does
-not know one keeps it as it is. See [Extensions](/format/extensions).
+`extensions/data/` holds what a data platform exported: the company's
+notebooks and wikis. Its `EXTENSION.md` says which system wrote it and in
+what format. A reader that does not know an extension keeps it as it is.
+See [Extensions](/format/extensions).
 
 </Steps>
 

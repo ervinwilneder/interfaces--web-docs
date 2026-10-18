@@ -1,0 +1,75 @@
+# OKRs
+
+An OKR is something the organization commits to achieve, measured
+by its key results.
+
+`okrs/<slug>/OKR.md`, with its key results under
+`key-results/`.
+
+## Fields
+
+Besides the [common fields](/format/documents#frontmatter-of-a-piece):
+
+| Field | Required | Notes |
+|---|---|---|
+| `type` | Yes | `OKR`. |
+| `kind` | Yes | The horizon: `strategic` (connects with the vision of the business), `tactical` (short-term deliverables that inform decisions) or `operational` (the day to day). |
+| `goal` | No | The goal the OKR belongs to. OKRs with the same `goal` are grouped, the way roles are grouped by team. |
+
+The body is the OKR's **description**.
+
+Links: `owned_by` toward the [roles](/format/roles) in charge of it, and
+`impacted_by` toward the [routines](/format/routines) that move it.
+
+```yaml filename="okrs/crecer-en-empresas/OKR.md"
+---
+type: OKR
+kind: tactical
+title: Crecer en empresas
+name: crecer-en-empresas
+goal: Crecer en el segmento empresas
+links:
+  - role: impacted_by
+    to: routines/seguimiento-de-consultas
+    created_at: 2026-10-18T15:12:02.293Z
+  - role: owned_by
+    to: roles/ventas/vendedor
+    created_at: 2026-10-18T15:12:02.293Z
+created_at: 2026-10-18T15:12:02.293Z
+updated_at: 2026-10-18T15:12:02.293Z
+created_by: user:equipo@acme.example
+updated_by: user:equipo@acme.example
+---
+Más consultas de empresas y más cierres en el trimestre.
+```
+
+## Key results
+
+Each key result is a `KeyResult` in `key-results/<nn>-<slug>.md`.
+
+| Field | Required | Notes |
+|---|---|---|
+| `type` | Yes | `KeyResult`. |
+| `position` | Yes | Its order inside the OKR. |
+| `title` | Yes | What it measures, in words. |
+| `measure` | Yes | What it measures, from the writer's catalog of measures (`leads_opened`, `conversion_rate`…). |
+| `start_value` | Yes | Where it starts. |
+| `target` | Yes | Where it has to get. |
+| `start_date`, `due_date` | Yes | The window, as dates. |
+| `current_value` | No | The last value measured. |
+| `measured_at` | No | When it was measured. |
+
+```yaml filename="okrs/crecer-en-empresas/key-results/002-25-de-conversion.md"
+---
+type: KeyResult
+position: 1
+due_date: 2026-12-31
+measure: conversion_rate
+start_date: 2026-10-01
+start_value: 10
+target: 25
+title: 25 % de conversión
+created_at: 2026-10-18T15:12:02.293Z
+updated_at: 2026-10-18T15:12:02.293Z
+---
+```

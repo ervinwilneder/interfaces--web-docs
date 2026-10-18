@@ -17,18 +17,18 @@ Besides the [common fields](/format/documents#frontmatter-of-a-piece):
 
 The body is the policy's **description**. A policy writes no links.
 
-```yaml filename="policies/aprobacion-de-compras/POLICY.md"
+```yaml filename="policies/asignacion-de-consultas/POLICY.md"
 ---
 type: Policy
-title: Aprobación de órdenes de compra
-name: aprobacion-de-compras
+title: Asignación de consultas
+name: asignacion-de-consultas
 require_catch_all: true
-created_at: 2026-10-15T15:47:35.165Z
-updated_at: 2026-10-16T12:01:34.655Z
+created_at: 2026-10-18T15:12:02.283Z
+updated_at: 2026-10-18T15:12:02.309Z
+created_by: user:equipo@acme.example
+updated_by: user:equipo@acme.example
 ---
-Quién aprueba una orden de compra según su franja de monto (`amount_band`:
-alta ≥ 20.000.000 ARS, media ≥ 5.000.000, baja el resto) y, en proveedores
-nuevos, siempre dirección.
+A quién va cada consulta nueva.
 ```
 
 ## Rules
@@ -44,28 +44,27 @@ is walked (`position`, from 0).
 | `when` | No | The condition. Without it, the rule catches everything that reaches it. |
 | `then` | Yes | Who handles the case. |
 
-```yaml filename="policies/aprobacion-de-compras/rules/001-proveedor-nuevo-direccion.md"
+```yaml filename="policies/asignacion-de-consultas/rules/001-empresas.md"
 ---
 type: Rule
 position: 0
 then:
-  label: Martín
+  label: Vendedor de empresas
   method: fixed
-  target: direccion/socio-comercial
-title: "Proveedor nuevo: dirección"
+  target: vendedor-empresas
+title: Empresas
 when:
   op: equals
-  path: supplier_new
-  value: true
-created_at: 2026-10-15T15:47:35.165Z
-updated_at: 2026-10-16T12:01:34.655Z
+  path: case.segment
+  value: empresa
+created_at: 2026-10-18T15:12:02.283Z
+updated_at: 2026-10-18T15:12:02.283Z
 ---
 ```
 
 ### Conditions
 
-`when` reads the case being evaluated by path (`supplier_new`,
-`amount_band`, `project.team`):
+`when` reads the case being evaluated by path (`case.segment`):
 
 | `op` | Holds when |
 |---|---|

@@ -14,7 +14,7 @@ the export.
 roles/<team>/<slug>/ROLE.md
 skills/<slug>/SKILL.md              + files/<nn>-<slug>.md
 policies/<slug>/POLICY.md           + rules/<nn>-<slug>.md
-objectives/<slug>/OBJECTIVE.md      + key-results/<nn>-<slug>.md
+okrs/<slug>/OKR.md      + key-results/<nn>-<slug>.md
 routines/<slug>/ROUTINE.md
 channels/<slug>/CHANNEL.md
 connections/<slug>/CONNECTION.md
@@ -50,8 +50,8 @@ no local disk uses `read`, `write` and `delete` on one path at a time.
 ## What it writes
 
 Through `fs` an agent writes every piece except roles (skills, policies,
-objectives, routines, channels and connections), and a skill's files.
-Roles, a policy's rules, an objective's key results and annotations are
+OKRs, routines, channels and connections), and a skill's files.
+Roles, a policy's rules, an OKR's key results and annotations are
 read-only through `fs`.
 
 A write replaces the whole piece: an attribute or a link left out of the

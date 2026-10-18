@@ -14,11 +14,11 @@ At the root: every commit, in order.
 ---
 type: Commits
 commits:
-  - id: c1ab1776-2205-4c7b-bfd4-90f3ce49d689
-    at: 2026-10-15T15:29:44.776Z
-    actor: admin:provisioning
-    message: alta de tenant
-    request_id: c56cf099-76bb-4799-88cb-5cbf85c0bf78
+  - id: fd9e1bb5-7ab7-40d4-a4e9-bf1f9b972253
+    at: 2026-10-18T15:12:02.221Z
+    actor: user:equipo@acme.example
+    message: Alta del rol de ventas
+    request_id: f2e77268-39f7-407d-8155-71b361573f69
     via: rest
 ---
 ```
@@ -38,65 +38,59 @@ commits:
 In each piece's folder: the changes that touched the piece, its
 subentities and its links, in the order they happened.
 
-```yaml filename="policies/aprobacion-de-compras/HISTORY.md"
+```yaml filename="policies/asignacion-de-consultas/HISTORY.md"
 ---
 type: History
 changes:
-  - at: 2026-10-15T15:47:35.165Z
-    commit: a21fe5a4-da9d-4c0a-bafb-a6aff55a786f
+  - at: 2026-10-18T15:12:02.283Z
+    commit: 5ef16ca0-909c-4fcf-89b0-86eb0815d6bb
     action: create
-    entity: subentity
-    target: rules/001-proveedor-nuevo-direccion
+    entity: record
     diff:
-      then:
+      description:
         from: null
-        to:
-          method: fixed
-          target: direccion/socio-comercial
-      title:
+        to: A quién va cada consulta nueva.
+      require_catch_all:
         from: null
-        to: "Proveedor nuevo: dirección"
-      when:
-        from: null
-        to:
-          op: equals
-          path: supplier_new
-          value: true
-      position:
-        from: null
-        to: 0
-      piece:
-        from: null
-        to: policies/aprobacion-de-compras
+        to: true
       type:
         from: null
-        to: Rule
+        to: Policy
+      name:
+        from: null
+        to: asignacion-de-consultas
+      tags:
+        from: null
+        to: []
+      title:
+        from: null
+        to: Asignación de consultas
 ---
 ```
 
-```yaml filename="objectives/crecer-canal-mayorista-q4/HISTORY.md"
+```yaml filename="okrs/crecer-en-empresas/HISTORY.md"
 ---
 type: History
 changes:
-  - at: 2026-10-16T11:29:57.867Z
-    commit: 29279938-d8bc-498a-b84d-0e6d2f84155a
+  - at: 2026-10-18T15:12:02.293Z
+    commit: e0206e4a-3212-463f-ab1e-336592523ee6
     action: create
     entity: association
-    target: impacted_by routines/calificar-consulta-mayorista
-    related: routines/calificar-consulta-mayorista
+    target: owned_by roles/ventas/vendedor
+    related: roles/ventas/vendedor
     diff:
       from:
         from: null
-        to: objectives/crecer-canal-mayorista-q4
+        to: okrs/crecer-en-empresas
       role:
         from: null
-        to: impacted_by
+        to: owned_by
       to_type:
         from: null
-        to: Routine
+        to: Role
       to:
         from: null
-        to: routines/calificar-consulta-mayorista
+        to: roles/ventas/vendedor
 ---
 ```
 
@@ -106,9 +100,11 @@ changes:
 | `commit` | The id of its commit in `COMMITS.md`. |
 | `action` | What happened: `create`, `update`, `archive`, `restore`, `delete`… |
 | `entity` | What it touched: `record` (the piece itself), `subentity` or `association` (a link). |
-| `target` | For a subentity, its path inside the piece (`rules/001-…`); for a link, its role and the other piece's folder (`impacted_by routines/calificar-consulta-mayorista`). |
+| `target` | For a subentity, its path inside the piece (`rules/001-…`); for a link, its role and the other piece's folder (`owned_by roles/ventas/vendedor`). |
 | `related` | For a link, the folder of the other piece. |
-| `entity_id` | For what is no longer in the bundle, the id the history gave it, in place of `target`. |
+| `path` | For what is no longer in the bundle, the last folder of its piece. With `target`, it names a subentity or a link that is gone. |
+| `name` | For what never had a path in the bundle (a user who was retired), its name. |
+| `type` | For what is no longer in the bundle, its POF type (`OKR`, `Policy`…). Left out when it was not a piece. |
 | `diff` | Each field that changed, with its `from` and `to`. See below. |
 
 ### The diff speaks the files
@@ -117,16 +113,31 @@ A diff names fields the way the documents write them:
 
 | Change of | Fields in the diff |
 |---|---|
-| a piece | `type` (`Policy`, `Objective`…), `kind`, `name`, `title`, `tags`, `archived_at` and each attribute by its own name (`goal`, `require_catch_all`). |
+| a piece | `type` (`Policy`, `OKR`…), `kind` (only in OKR, Channel and Connection, as in their documents), `name`, `title`, `tags`, `archived_at`, each attribute by its own name (`goal`, `require_catch_all`) and its annotations by their path (`annotations/1`). |
 | a subentity | `piece` (the folder of its piece), `type` (`Rule`, `KeyResult`, `File`), `position`, `archived_at` and each attribute by its own name (`title`, `when`, `then`). |
 | a link | `from` and `to` (folders), `to_type` (the POF type of `to`), `role`, `archived_at`. |
 
 An attribute whose name is one of those fields keeps an `attributes.`
-prefix in the diff. Pieces are always named by their folders, never by
-ids.
+prefix in the diff.
 
-A `HISTORY.md` at the root keeps the changes of what is no longer a
-piece of the bundle, named by the ids the history gave them.
+A `kind` is always one the family has today. A type the writer's catalog
+retired is written as the type the piece moved to, or, if it never
+moved, as the one it has now. If there is none, the diff leaves `kind`
+out.
+
+### Nothing is named by id
+
+Everything in a history is named by path. What is still in the bundle
+is named by its folder (and `target`). What is no longer there is named
+by the last path it had:
+
+- a deleted piece, by `path`, its last folder;
+- a subentity or a link that is gone, by `path` and `target`;
+- what never had a path, such as a retired user, by `name`.
+
+Relations toward something deleted use that same last path. A
+`HISTORY.md` at the root keeps the changes whose piece is no longer in
+the bundle. An importer gives a new id to each thing it finds named.
 
 <Callout type="info">
   The history and the snapshot must agree: replaying every change in

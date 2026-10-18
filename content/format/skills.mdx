@@ -16,7 +16,7 @@ Besides the [common fields](/format/documents#frontmatter-of-a-piece):
 |---|---|---|
 | `type` | Yes | `Skill`. No `kind`. |
 | `description` | Yes | When to use it. This is what an agent reads before deciding to load the skill. |
-| `domain` | Yes | The area it belongs to (`administracion`, `compras`). A role's `skill_domains` refer to it. |
+| `domain` | Yes | The area it belongs to (`ventas`, `soporte`). A role's `skill_domains` refer to it. |
 | `category` | No | A free label for grouping skills. |
 | `license` | No | The skill's license, when it comes from elsewhere. |
 | `allowed_tools` | No | The tools the skill asks for, as a list. |
@@ -30,25 +30,25 @@ The body is the skill's **instructions**, in free Markdown.
 
 ## Example
 
-```yaml filename="skills/criterio-de-rotacion/SKILL.md"
+```yaml filename="skills/cotizar/SKILL.md"
 ---
 type: Skill
-title: Criterio de rotación por categoría
-name: criterio-de-rotacion
-description: Cuando hay que proponer movimientos de mercadería entre locales, o de un local al outlet.
-domain: compras
+title: Cotizar
+name: cotizar
+description: Cuando un cliente pide precio de uno o más productos.
+domain: ventas
 links:
   - role: used_by
-    to: roles/compras/producto-y-stock
-    created_at: 2026-10-15T15:47:27.892Z
-created_at: 2026-10-15T15:47:27.892Z
-updated_at: 2026-10-15T16:24:22.464Z
+    to: roles/ventas/vendedor
+    created_at: 2026-10-18T15:12:02.241Z
+created_at: 2026-10-18T15:12:02.241Z
+updated_at: 2026-10-18T15:12:02.241Z
+created_by: user:equipo@acme.example
+updated_by: user:equipo@acme.example
 ---
-Reglas de Casa Norte para rotar mercadería (las valida Lucía, no se aplican solas):
-- Calzado: se rota por curva de talles.
-- Outlet: va lo que tiene más de 12 semanas de edad y un remanente mayor al 50 %, sin excepción por local.
-- Franquicias: se les propone, no se les impone; la propuesta va por WhatsApp al dueño.
-Salida: una lista de movimientos (de, a, categoría, cantidad, motivo) ordenada por impacto.
+1. Confirmá productos y cantidades.
+2. Armá la cotización con la lista de precios vigente.
+3. Mandala y agendá el seguimiento a los dos días.
 ```
 
 ## Files

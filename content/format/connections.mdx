@@ -31,26 +31,30 @@ Links: `used_by` toward the [roles](/format/roles) and
 [routines](/format/routines) that use it, and `handbook` toward the
 [skills](/format/skills) that explain it.
 
-```yaml filename="connections/greatmove-whatsapp/CONNECTION.md"
+```yaml filename="connections/calendario/CONNECTION.md"
 ---
 type: Connection
-kind: mcp
-title: Greatmove WhatsApp
-name: greatmove-whatsapp
-engine: whatsapp
+kind: openapi
+title: Calendario
+name: calendario
+service: calendar
+url: https://calendar.example.com/openapi.json
 links:
+  - role: handbook
+    to: skills/cotizar
+    created_at: 2026-10-18T15:12:02.272Z
   - role: used_by
-    to: roles/mayorista/atencion
-    created_at: 2026-10-15T15:47:38.557Z
+    to: roles/ventas/vendedor
+    created_at: 2026-10-18T15:12:02.272Z
   - role: used_by
-    to: routines/calificar-consulta-mayorista
-    created_at: 2026-10-15T15:47:38.557Z
-created_at: 2026-10-15T15:29:44.831Z
-updated_at: 2026-10-15T16:24:34.027Z
+    to: routines/seguimiento-de-consultas
+    created_at: 2026-10-18T15:12:02.272Z
+created_at: 2026-10-18T15:12:02.272Z
+updated_at: 2026-10-18T15:12:02.272Z
+created_by: user:equipo@acme.example
+updated_by: user:equipo@acme.example
 ---
-WhatsApp de Casa Norte: números, contactos, conversaciones, envío de
-mensajes y templates, bandeja pendiente. Usalo para leer o responder
-conversaciones de WhatsApp.
+Para agendar reuniones con clientes.
 ```
 
 <Callout type="warning">

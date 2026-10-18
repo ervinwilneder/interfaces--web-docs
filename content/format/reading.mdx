@@ -8,7 +8,8 @@ written by one system reads the same in another.
 A reader rejects a bundle, saying which file and why, when:
 
 - `POF.md` is missing, or its `type`, `format` and `revision` are not
-  `Bundle`, `pof` and a revision it reads.
+  `Bundle`, `pof` and a revision it reads. A reader of one revision is
+  not required to read the others.
 - A file outside `extensions/` is not part of the
   [layout](/format#layout).
 - A piece's `type` does not match its folder (`policies/…/POLICY.md`
@@ -18,7 +19,7 @@ A reader rejects a bundle, saying which file and why, when:
 - An attribute does not hold against its type: a required one is
   missing, or a value has the wrong shape.
 - A subentity's `type` does not match its folder, or it sits in a folder
-  its family does not have (`rules/` under an objective).
+  its family does not have (`rules/` under an OKR).
 - A link's `role` is not one of the [five roles](/format/documents#links), or its `to` is not a piece of the bundle.
 - A `HISTORY.md` comes without `COMMITS.md`, or names a commit, a
   subentity or a link that is not there.

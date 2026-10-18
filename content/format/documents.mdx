@@ -12,8 +12,8 @@ Fields are written in this order:
 
 | Field | Required | Notes |
 |---|---|---|
-| `type` | Yes | The POF type, capitalized: `Role`, `Skill`, `Policy`, `Objective`, `Routine`, `Channel`, `Connection`. It must match the folder. |
-| `kind` | In some families | The piece's type within its family's catalog, written only where the family has more than one: `Objective` (`strategic`, `tactical`, `operational`), `Channel` (the platform) and `Connection` (`mcp`, `openapi`). |
+| `type` | Yes | The POF type, capitalized: `Role`, `Skill`, `Policy`, `OKR`, `Routine`, `Channel`, `Connection`. It must match the folder. |
+| `kind` | In some families | The piece's type within its family's catalog, written only where the family has more than one: `OKR` (`strategic`, `tactical`, `operational`), `Channel` (the platform) and `Connection` (`mcp`, `openapi`). |
 | `title` | Yes | The human name. |
 | `name` | Yes | The slug, the same as the piece's folder. |
 | *attributes* | Depends on the type | The piece's attributes, each as a field of its own (`team`, `goal`, `require_catch_all`…). Each type's page lists them. |
@@ -23,23 +23,29 @@ Fields are written in this order:
 | `created_at`, `updated_at` | No | ISO 8601 timestamps. |
 | `created_by`, `updated_by` | No | Who created and last changed it, as the writing system names its actors. |
 
-```yaml filename="skills/conciliar-cheques/SKILL.md"
+```yaml filename="routines/seguimiento-de-consultas/ROUTINE.md"
 ---
-type: Skill
-title: Conciliar cheques con proveedores
-name: conciliar-cheques
-description: Cuando hay que cruzar los cheques diferidos emitidos contra las facturas y órdenes de compra de un proveedor.
-domain: administracion
+type: Routine
+title: Seguimiento de consultas
+name: seguimiento-de-consultas
+definition_of_done: Toda consulta del día tiene respuesta y próximo paso.
+steps: |-
+  1. Revisá las consultas sin respuesta de las últimas 24 horas.
+  2. Respondé o derivá cada una.
+  3. Agendá el próximo contacto.
 links:
   - role: used_by
-    to: roles/administracion/gerenta
-    created_at: 2026-10-15T15:47:26.894Z
-created_at: 2026-10-15T15:47:26.894Z
-updated_at: 2026-10-15T16:24:21.758Z
+    to: roles/ventas/vendedor
+    created_at: 2026-10-18T15:12:02.261Z
+  - role: uses
+    to: channels/whatsapp-ventas
+    created_at: 2026-10-18T15:12:02.261Z
+created_at: 2026-10-18T15:12:02.261Z
+updated_at: 2026-10-18T15:12:02.261Z
+created_by: user:equipo@acme.example
+updated_by: user:equipo@acme.example
 ---
-1. Tomá las órdenes de compra del proveedor en estado Ordenado o Recibido.
-2. Para cada una, verificá en el checklist si la factura está recibida y el cheque emitido.
-3. Una OC recibida sin factura es un reclamo al proveedor.
+Que ninguna consulta quede sin respuesta ni sin seguimiento.
 ```
 
 An attribute can never be named like one of the fields above: a writer
@@ -49,7 +55,7 @@ that has one would lose it.
 
 The body is the piece's main long text, which depends on the family: the
 **instructions** of a Role or a Skill, the **description** of a Policy,
-Objective, Channel or Connection, and the **goal** of a Routine. Any
+OKR, Channel or Connection, and the **goal** of a Routine. Any
 other long text (a routine's `steps`, for example) is an attribute in the
 frontmatter.
 
@@ -66,8 +72,8 @@ the bundle. It is written as a path, never an id:
 ```yaml
 links:
   - role: owned_by
-    to: roles/direccion/socio-comercial
-    created_at: 2026-10-16T10:48:05.651Z
+    to: roles/ventas/vendedor
+    created_at: 2026-10-18T15:12:02.293Z
 ```
 
 | Field | Notes |
@@ -84,11 +90,11 @@ The five roles:
 | `used_by` | this piece is used by `to` | a Skill, Channel or Routine toward the roles that use it; a Connection toward the roles and routines that use it |
 | `uses` | this piece uses `to` | a Routine toward the channels it works through |
 | `handbook` | this piece is explained in `to` | a Connection toward the skills that explain it |
-| `owned_by` | this piece is in the charge of `to` | an Objective toward the roles that own it |
-| `impacted_by` | this piece is moved by `to` | an Objective toward the routines that move it |
+| `owned_by` | this piece is in the charge of `to` | an OKR toward the roles that own it |
+| `impacted_by` | this piece is moved by `to` | an OKR toward the routines that move it |
 
 Each link is written once, on one side. A reader that wants the other
-direction (the skills a role uses, the objectives a routine moves) looks
+direction (the skills a role uses, the OKRs a routine moves) looks
 for links whose `to` is the piece.
 
 ### Paths across the bundle
@@ -97,22 +103,22 @@ Every relation in a bundle is a path, in the core and in the
 [extensions](/format/extensions):
 
 - The core lives at the root, so its paths already start there:
-  `roles/mayorista/atencion`. To point into an extension, a core path
+  `roles/ventas/vendedor`. To point into an extension, a core path
   goes through its folder: `extensions/<system>/…`.
 - Inside an extension, paths are relative to the extension's folder.
 - An extension that points outside its folder writes a path from the
-  root with a leading `/`: `/roles/mayorista/atencion`,
-  `/extensions/data/artifacts/stock`.
+  root with a leading `/`: `/roles/ventas/vendedor`,
+  `/extensions/data/wikis/manual-de-ventas`.
 
 A reader resolves a path that starts with `/` against the root of the
 bundle.
 
 ## Subentities
 
-Some pieces carry items of their own: a policy's rules, an objective's
+Some pieces carry items of their own: a policy's rules, an OKR's
 key results, a skill's files. Each item is a file in a folder of the
 piece, named by a zero-padded position and a slug of its title
-(`rules/001-proveedor-nuevo-direccion.md`). Its frontmatter has:
+(`rules/001-empresas.md`). Its frontmatter has:
 
 | Field | Notes |
 |---|---|
@@ -124,11 +130,12 @@ piece, named by a zero-padded position and a slug of its title
 ## Annotations
 
 An annotation is a note left on a piece: `annotations/1.md`,
-`annotations/2.md`… in order. Its frontmatter is `type: Annotation` and
-an `id` that a writer keeps across exports; its body is the note.
+`annotations/2.md`… in order. Its frontmatter is `type: Annotation`; its
+body is the note. An annotation is named by its path
+(`annotations/1`), like everything else in the bundle.
 
 <Callout type="info">
   The folder is the identity. Two bundles that hold
-  `policies/aprobacion-de-compras` are talking about the same policy,
+  `policies/asignacion-de-consultas` are talking about the same policy,
   whatever ids each system gives it inside.
 </Callout>

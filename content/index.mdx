@@ -8,38 +8,27 @@ import { Cards } from "nextra/components";
 
 **Portable Organization Format**: a whole organization as one bundle of
 Markdown files with YAML frontmatter. Its roles, skills, policies,
-routines, objectives, channels and connections, with the links between
+routines, OKRs, channels and connections, with the links between
 them and, optionally, the history of every change. A person reads it in
 a text editor, a script parses it, an agent reads it as plain documents,
 and another system imports it.
 
-This site describes **revision 2026-10-16** of the format.
+This site describes **revision 2026-10-18** of the format.
 
-Here is one file of a real bundle, a Role:
+Here is one file of an example bundle, a Role:
 
-```yaml filename="roles/mayorista/atencion/ROLE.md"
+```yaml filename="roles/ventas/vendedor/ROLE.md"
 ---
 type: Role
-title: Atención mayorista
-name: atencion
-team: mayorista
-created_at: 2026-10-15T15:47:24.633Z
-updated_at: 2026-10-15T16:24:19.653Z
+title: Vendedor
+name: vendedor
+team: ventas
+created_at: 2026-10-18T15:12:02.221Z
+updated_at: 2026-10-18T15:12:02.305Z
+created_by: user:equipo@acme.example
+updated_by: user:equipo@acme.example
 ---
-# Identidad
-Atendés el canal mayorista de Casa Norte por WhatsApp: dueños de
-franquicias y clientes mayoristas del interior.
-
-# Marco operativo
-- Cada consulta se califica (skill `calificar-consulta-mayorista`):
-  pedido, stock, reclamo u otro.
-- Los reclamos se escalan a Verónica con una nota en la conversación.
-
-# Propósito
-Que ninguna consulta mayorista quede sin respuesta más de 30 minutos.
-
-# Reglas
-- No das descuentos: la lista mayorista la define dirección.
+Atendés las consultas de clientes nuevos, cotizás y hacés el seguimiento hasta que compran o descartan. Las de empresas tienen prioridad.
 ```
 
 The folder says which team the role belongs to and what it is called.
@@ -54,7 +43,7 @@ COMMITS.md                  the commits (optional)
 roles/<team>/<slug>/ROLE.md
 skills/<slug>/SKILL.md
 policies/<slug>/POLICY.md
-objectives/<slug>/OBJECTIVE.md
+okrs/<slug>/OKR.md
 routines/<slug>/ROUTINE.md
 channels/<slug>/CHANNEL.md
 connections/<slug>/CONNECTION.md
@@ -63,20 +52,20 @@ extensions/<system>/        what other systems add, under their own namespace
 
 The **core** is the seven types every organization has, whatever system
 it runs on: [Role](/format/roles), [Skill](/format/skills),
-[Policy](/format/policies), [Objective](/format/objectives),
+[Policy](/format/policies), [OKR](/format/okrs),
 [Routine](/format/routines), [Channel](/format/channels) and
 [Connection](/format/connections). Everything else (a CRM's deals, a
 data platform's notebooks and wikis, an ERP's invoices, a BI tool's
 dashboards) travels as an [extension](/format/extensions), in its own
-folder, with its types prefixed by its namespace (`hub.deal`,
-`data.Artifact`). A reader keeps the extensions it does not know, intact.
+folder, with its types prefixed by its namespace (`data.notebook`,
+`data.wiki`). A reader keeps the extensions it does not know, intact.
 
 ## Five rules that hold everywhere
 
 1. `type` is always present, capitalized in the core (`Role`, `Policy`)
-   and namespaced in an extension (`hub.deal`).
+   and namespaced in an extension (`data.notebook`).
 2. A field with no value is left out, never written empty.
-3. A piece's identity is its folder: `roles/mayorista/atencion` is that
+3. A piece's identity is its folder: `roles/ventas/vendedor` is that
    role, wherever the bundle goes.
 4. Relations are paths inside the bundle, never ids.
 5. Access state (keys, credentials, sessions, who is allowed to connect)

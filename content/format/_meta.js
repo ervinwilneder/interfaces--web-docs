@@ -5,7 +5,7 @@ export default {
   roles: "Roles",
   skills: "Skills",
   policies: "Policies",
-  objectives: "Objectives",
+  okrs: "OKRs",
   routines: "Routines",
   channels: "Channels",
   connections: "Connections",
