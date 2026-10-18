@@ -16,10 +16,25 @@ namespace.
       <FileTree.File name="COMMITS.md" />
       <FileTree.File name="data.md" />
       <FileTree.Folder name="notebooks" defaultOpen>
-        <FileTree.Folder name="reunion-semanal" />
+        <FileTree.Folder name="reunion-semanal" defaultOpen>
+          <FileTree.File name="NOTEBOOK.md" />
+          <FileTree.File name="HISTORY.md" />
+          <FileTree.Folder name="note">
+            <FileTree.File name="001-note.md" />
+          </FileTree.Folder>
+        </FileTree.Folder>
       </FileTree.Folder>
       <FileTree.Folder name="wikis" defaultOpen>
-        <FileTree.Folder name="manual-de-ventas" />
+        <FileTree.Folder name="manual-de-ventas" defaultOpen>
+          <FileTree.File name="WIKI.md" />
+          <FileTree.File name="HISTORY.md" />
+          <FileTree.Folder name="annotations">
+            <FileTree.File name="1.md" />
+          </FileTree.Folder>
+          <FileTree.Folder name="page">
+            <FileTree.File name="001-como-cotizar.md" />
+          </FileTree.Folder>
+        </FileTree.Folder>
       </FileTree.Folder>
       <FileTree.Folder name="structure" />
     </FileTree.Folder>
@@ -60,10 +75,74 @@ folder, relations as paths, access state left out. Beyond that, its
 layout is its system's.
 
 Its types carry its namespace, so a document says which system it
-belongs to wherever it ends up: the data extension writes
-`type: data.notebook`, `type: data.wiki` and `type: data.page`. A type
-without a dot is a core type; a type with one belongs to the extension
-named before the dot. An extension can describe its own types (their fields, what each
+belongs to wherever it ends up. A type without a dot is a core type; a
+type with one belongs to the extension named before the dot. The data
+extension writes its notebooks and wikis this way:
+
+```yaml filename="extensions/data/notebooks/reunion-semanal/NOTEBOOK.md"
+---
+type: data.notebook
+title: Reunión semanal
+tags:
+  - equipo
+created_at: 2026-10-18T15:25:01.722Z
+updated_at: 2026-10-18T15:25:01.722Z
+created_by: user:equipo@acme.example
+updated_by: user:equipo@acme.example
+---
+Lo que se decide en la reunión de los lunes.
+```
+
+```yaml filename="extensions/data/notebooks/reunion-semanal/note/001-note.md"
+---
+type: data.note
+attributes:
+  occurred_at: 2026-10-18T15:25:01.747Z
+created_at: 2026-10-18T15:25:01.743Z
+updated_at: 2026-10-18T15:25:01.743Z
+created_by: user:equipo@acme.example
+updated_by: user:equipo@acme.example
+---
+Prioridad del trimestre: consultas de empresas. Se mide con el OKR del trimestre.
+```
+
+```yaml filename="extensions/data/wikis/manual-de-ventas/WIKI.md"
+---
+type: data.wiki
+title: Manual de ventas
+created_at: 2026-10-18T15:25:01.754Z
+updated_at: 2026-10-18T15:25:33.034Z
+created_by: user:equipo@acme.example
+updated_by: user:equipo@acme.example
+---
+Cómo vende Acme.
+```
+
+```yaml filename="extensions/data/wikis/manual-de-ventas/page/001-como-cotizar.md"
+---
+type: data.page
+attributes:
+  summary: Los pasos de una cotización.
+  title: Cómo cotizar
+created_at: 2026-10-18T15:25:01.764Z
+updated_at: 2026-10-18T15:25:01.764Z
+created_by: user:equipo@acme.example
+updated_by: user:equipo@acme.example
+---
+Confirmá productos y cantidades, usá la lista de precios vigente y agendá el seguimiento.
+```
+
+Its own manifest, `data.md`, is a `data.Export`, and it describes its
+types in `structure/` as `data.Type`, `data.Subtype` and `data.Family`
+documents. An annotation inside an extension has the same shape as in
+the core:
+
+```yaml filename="extensions/data/wikis/manual-de-ventas/annotations/1.md"
+---
+type: Annotation
+---
+Actualizar cuando cambie la lista de precios.
+``` An extension can describe its own types (their fields, what each
 one means) in documents of its own, so that a reader understands them
 without knowing the system. An extension can carry binary files too.
 

@@ -14,11 +14,10 @@ At the root: every commit, in order.
 ---
 type: Commits
 commits:
-  - id: fd9e1bb5-7ab7-40d4-a4e9-bf1f9b972253
-    at: 2026-10-18T15:12:02.221Z
+  - id: df9bc256-91c1-4c26-a88a-a9203bd95a3d
+    at: 2026-10-18T15:25:01.591Z
     actor: user:equipo@acme.example
     message: Alta del rol de ventas
-    request_id: f2e77268-39f7-407d-8155-71b361573f69
     via: rest
 ---
 ```
@@ -29,7 +28,6 @@ commits:
 | `at` | Yes | When it happened. |
 | `actor` | Yes | Who made it, as the writing system names its actors. |
 | `message` | No | Why. |
-| `request_id` | No | The request that produced it. |
 | `via` | No | How it came in: `rest`, `mcp`, `import` or `system`. |
 | `reverts` | No | The id of an earlier commit it undoes. |
 
@@ -42,29 +40,36 @@ subentities and its links, in the order they happened.
 ---
 type: History
 changes:
-  - at: 2026-10-18T15:12:02.283Z
-    commit: 5ef16ca0-909c-4fcf-89b0-86eb0815d6bb
+  - at: 2026-10-18T15:25:01.659Z
+    commit: 609545ed-7ff8-4869-b80c-6d0d53b49310
     action: create
-    entity: record
+    entity: subentity
+    target: rules/001-empresas
     diff:
-      description:
+      then:
         from: null
-        to: A quién va cada consulta nueva.
-      require_catch_all:
-        from: null
-        to: true
-      type:
-        from: null
-        to: Policy
-      name:
-        from: null
-        to: asignacion-de-consultas
-      tags:
-        from: null
-        to: []
+        to:
+          label: Vendedor de empresas
+          method: fixed
+          target: vendedor-empresas
       title:
         from: null
-        to: Asignación de consultas
+        to: Empresas
+      when:
+        from: null
+        to:
+          op: equals
+          path: case.segment
+          value: empresa
+      position:
+        from: null
+        to: 0
+      piece:
+        from: null
+        to: policies/asignacion-de-consultas
+      type:
+        from: null
+        to: Rule
 ---
 ```
 
@@ -72,8 +77,8 @@ changes:
 ---
 type: History
 changes:
-  - at: 2026-10-18T15:12:02.293Z
-    commit: e0206e4a-3212-463f-ab1e-336592523ee6
+  - at: 2026-10-18T15:25:01.671Z
+    commit: bd9b535e-c845-4d89-840a-c71f520eb60a
     action: create
     entity: association
     target: owned_by roles/ventas/vendedor
@@ -137,7 +142,60 @@ by the last path it had:
 
 Relations toward something deleted use that same last path. A
 `HISTORY.md` at the root keeps the changes whose piece is no longer in
-the bundle. An importer gives a new id to each thing it finds named.
+the bundle, each with its POF `type` and its last `path`. Here, a role
+that was deleted:
+
+```yaml filename="HISTORY.md"
+---
+type: History
+changes:
+  - at: 2026-10-18T15:25:01.925Z
+    commit: 302e9d16-a0b0-4fb1-b473-9132a11d8719
+    action: delete
+    entity: record
+    type: Role
+    path: roles/ventas/cotizador
+    diff:
+      instructions:
+        from: Armás las cotizaciones que te pasa el vendedor.
+        to: null
+      team:
+        from: ventas
+        to: null
+      type:
+        from: Role
+        to: null
+      name:
+        from: cotizador
+        to: null
+      tags:
+        from: []
+        to: null
+      title:
+        from: Cotizador
+        to: null
+---
+```
+
+An annotation is named by its path inside the piece. Adding one is an
+update of the piece:
+
+```yaml filename="policies/asignacion-de-consultas/HISTORY.md"
+---
+type: History
+changes:
+  - at: 2026-10-18T15:25:01.689Z
+    commit: e0a7b5cb-d9a8-47a4-b08b-15e87aa497ed
+    action: update
+    entity: record
+    diff:
+      annotations/1:
+        from: null
+        to: Revisar los turnos si entra un vendedor nuevo.
+---
+```
+
+An importer gives a new id to each thing it finds named.
 
 The only id in a bundle is a commit's own: commits are identified by
 their `id`, like a git hash, and `commit:` and `reverts` reference it.
