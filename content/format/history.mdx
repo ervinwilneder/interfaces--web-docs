@@ -46,6 +46,12 @@ changes:
     entity: subentity
     target: rules/001-empresas
     diff:
+      piece:
+        from: null
+        to: policies/asignacion-de-consultas
+      position:
+        from: null
+        to: 0
       then:
         from: null
         to:
@@ -55,21 +61,15 @@ changes:
       title:
         from: null
         to: Empresas
+      type:
+        from: null
+        to: Rule
       when:
         from: null
         to:
           op: equals
           path: case.segment
           value: empresa
-      position:
-        from: null
-        to: 0
-      piece:
-        from: null
-        to: policies/asignacion-de-consultas
-      type:
-        from: null
-        to: Rule
 ---
 ```
 
@@ -90,12 +90,12 @@ changes:
       role:
         from: null
         to: owned_by
-      to_type:
-        from: null
-        to: Role
       to:
         from: null
         to: roles/ventas/vendedor
+      to_type:
+        from: null
+        to: Role
 ---
 ```
 
@@ -159,20 +159,20 @@ changes:
       instructions:
         from: Armás las cotizaciones que te pasa el vendedor.
         to: null
-      team:
-        from: ventas
-        to: null
-      type:
-        from: Role
-        to: null
       name:
         from: cotizador
         to: null
       tags:
         from: []
         to: null
+      team:
+        from: ventas
+        to: null
       title:
         from: Cotizador
+        to: null
+      type:
+        from: Role
         to: null
 ---
 ```

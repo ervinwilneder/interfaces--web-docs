@@ -4,7 +4,8 @@ import { Callout, Steps } from "nextra/components";
 
 A POF bundle is a zip of Markdown files, so nothing here needs more than
 a shell. The examples come from `ejemplo.pof.zip`, the bundle of a small
-fictional company: the whole core and one extension, data.
+fictional company: the whole core and three extensions, hub, data and
+loops.
 
 <Steps>
 
@@ -37,7 +38,9 @@ counts:
   commits: 12
   changes: 25
 extensions:
+  - hub
   - data
+  - loops
 ---
 ```
 
@@ -99,9 +102,10 @@ without them is a snapshot. See [History](/format/history).
 
 ### Leave the extensions alone
 
-`extensions/data/` holds what a data platform exported: the company's
-notebooks and wikis. Its `EXTENSION.md` says which system wrote it and in
-what format. A reader that does not know an extension keeps it as it is.
+`extensions/` holds what other systems exported: a CRM's contacts and
+deals (`hub`), the company's notebooks and wikis (`data`) and its
+automations (`loops`). Each one's `EXTENSION.md` says which system wrote
+it and in what format. A reader that does not know an extension keeps it as it is.
 See [Extensions](/format/extensions).
 
 </Steps>

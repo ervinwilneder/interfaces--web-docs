@@ -56,7 +56,7 @@ system: nicetry data
 format: data-export/1
 spec: https://data-mesk.onrender.com/llms.txt
 ---
-The notebooks and wikis of the business, as the nicetry data engine exports them (its own format, `data.md` is its manifest).
+Lo que tiene Data del cliente, tal como lo exporta el engine.
 ```
 
 | Field | Required | Notes |
@@ -165,7 +165,43 @@ natural key (a WhatsApp number by its phone in E.164), never by an id.
 ## A whole bundle
 
 A bundle can carry the core and the extensions of several systems at
-once: one POF for the whole organization. Each system imports its own
+once: one POF for the whole organization.
+
+<FileTree>
+  <FileTree.File name="POF.md" />
+  <FileTree.File name="COMMITS.md" />
+  <FileTree.File name="HISTORY.md" />
+  <FileTree.Folder name="channels" />
+  <FileTree.Folder name="connections" />
+  <FileTree.Folder name="okrs" />
+  <FileTree.Folder name="policies" />
+  <FileTree.Folder name="roles" />
+  <FileTree.Folder name="routines" />
+  <FileTree.Folder name="skills" />
+  <FileTree.Folder name="extensions" defaultOpen>
+    <FileTree.Folder name="hub" defaultOpen>
+      <FileTree.File name="EXTENSION.md" />
+      <FileTree.File name="hub.md" />
+      <FileTree.Folder name="pipelines" />
+      <FileTree.Folder name="records" />
+    </FileTree.Folder>
+    <FileTree.Folder name="data" defaultOpen>
+      <FileTree.File name="EXTENSION.md" />
+      <FileTree.File name="data.md" />
+      <FileTree.Folder name="notebooks" />
+      <FileTree.Folder name="wikis" />
+    </FileTree.Folder>
+    <FileTree.Folder name="loops" defaultOpen>
+      <FileTree.File name="EXTENSION.md" />
+      <FileTree.File name="loops.md" />
+      <FileTree.Folder name="loops" />
+    </FileTree.Folder>
+  </FileTree.Folder>
+</FileTree>
+
+The manifest lists the three under `extensions`, and each one carries
+its own: `hub.md` is a `hub.Export`, `data.md` a `data.Export` and
+`loops.md` a `loops.Export`. Each system imports its own
 part, `extensions/<system>/`, and resolves every `/…` against the root
 of the bundle. A path that is not in the bundle is rejected, naming the
 file and the path.
