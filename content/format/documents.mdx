@@ -108,7 +108,12 @@ Every relation in a bundle is a path, in the core and in the
 - Inside an extension, paths are relative to the extension's folder.
 - An extension that points outside its folder writes a path from the
   root with a leading `/`: `/roles/ventas/vendedor`,
-  `/extensions/data/wikis/manual-de-ventas`.
+  `/extensions/data/wikis/manual-de-ventas`. Toward the core, it names a
+  piece by its folder: `/roles/<team>/<slug>`, `/routines/<slug>`,
+  `/policies/<slug>`.
+- What belongs to another system and has no path in the bundle is named
+  by its natural key, never by an id: a WhatsApp number by its phone in
+  E.164, not by the id the system gave it.
 
 A reader resolves a path that starts with `/` against the root of the
 bundle.

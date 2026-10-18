@@ -156,6 +156,25 @@ through its folder, `extensions/<system>/…`. A reader resolves a path
 that starts with `/` against the root of the bundle. See
 [Paths across the bundle](/format/documents#paths-across-the-bundle).
 
+Toward the core, an extension names a piece by its folder:
+`/roles/<team>/<slug>`, `/routines/<slug>`, `/policies/<slug>`. What
+belongs to another system and has no path in the bundle is named by its
+natural key (a WhatsApp number by its phone in E.164), never by an id.
+
+## A whole bundle
+
+A bundle can carry the core and the extensions of several systems at
+once: one POF for the whole organization. Each system imports its own
+part, `extensions/<system>/`, and resolves every `/…` against the root
+of the bundle. A path that is not in the bundle is rejected, naming the
+file and the path.
+
+An extension can also travel on its own, as its system's zip, without
+the rest of the bundle. Then its `/…` paths are kept as they are,
+unchecked, since what they point to is not there.
+
+An extension leaves out what can be rebuilt: a cache is not exported.
+
 ## History
 
 An extension can keep its own history, in its own folder: its

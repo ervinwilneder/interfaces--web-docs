@@ -38,6 +38,11 @@ taken whole or not at all.
   imports it, a `create` for every piece, subentity and link.
 - **Extensions** it does not know stay as they are. It does not read
   them, drop them or rewrite them, binaries included.
+- **A whole bundle**, with the core and several extensions, is imported
+  part by part: each system takes its own folder and resolves the `/…`
+  paths against the root of the bundle. A path that is not in the bundle
+  is rejected, with the file and the path. An extension imported on its
+  own, outside a bundle, keeps its `/…` paths unchecked.
 - **Access** is not imported because it is not there: keys, credentials
   and connections' secrets are set up again by whoever imports.
 
@@ -45,6 +50,7 @@ taken whole or not at all.
 
 A writer produces the same bundle for the same content: keys in a
 stable order, subentities in their order, the manifest dated by the
-last commit rather than by the moment of export. Two exports of an
-unchanged organization are then byte for byte the same, and a diff
-between two exports shows exactly what changed.
+last commit rather than by the moment of export. Neither the bundle nor
+the manifests of its extensions carry the client's name or the date of
+the export. An export and an import followed by another export give the
+same bytes, and a diff between two exports shows exactly what changed.
