@@ -23,7 +23,7 @@
     "deploy": "vercel --prod"
   },
   "dependencies": {
-    "next": "^15.5.25",
+    "next": "^15.5.28",
     "nextra": "^4.6.1",
     "nextra-theme-docs": "^4.6.1",
     "react": "^19.2.8",
@@ -34,7 +34,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "^15.5.25",
+    "eslint-config-next": "^15.5.28",
     "patch-package": "^8.0.1",
     "typescript": "^5"
   }
